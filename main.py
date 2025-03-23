@@ -6,7 +6,7 @@ from data import db_session
 from data.users import User
 from data.posts import Post
 
-from data.forms.AddPostForm import AddPostForm
+from data.forms.posts import AddPostForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
