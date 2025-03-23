@@ -1,0 +1,66 @@
+.btn {
+    display: inline-block; /* Строчно-блочный элемент */
+    background: #8C959D; /* Серый цвет фона */
+    color: #fff; /* Белый цвет текста */
+    padding: 1rem 1.5rem; /* Поля вокруг текста */
+    text-decoration: none; /* Убираем подчёркивание */
+    border-radius: 3px; /* Скругляем уголки */
+   }
+
+.sidenav {
+    height: 90%; /* Full-height: remove this if you want "auto" height */
+    width: 10%; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    bottom: 0; /* Stay at the top */
+    left: 0; /* Black */
+    overflow-x: hidden;
+    padding-top: 20px;
+    background-color: #f2f2f2;
+    padding-right: 0px;
+}
+
+/* The navigation menu links */
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav a:hover {
+    color: black;
+}
+
+.sidenav ul {
+    padding-left: 0px;
+}
+
+.sidenav li{
+    list-style-type: none;
+}
+
+.sidenav li:hover {
+    background-color: gray;
+}
+
+.myheader {
+    top: 0;
+    position: fixed;
+    height: 10%;
+}
+
+nav.myheader {
+    background-color: black;
+    width : 100%
+}
+
+.myheader h1{
+    color: white;
+}
+
+div.myheader {
+    display: flex;
+    align-items: center;
+}
