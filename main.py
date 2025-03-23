@@ -22,6 +22,12 @@ def index():
         number += 1
     return render_template('index.html', number=number)
 
+@app.route('/profile')
+def profile():
+    information = {"p1": "alex", "p2": "genius"}
+    # information = {"p1": User.name, "p2":User.about, "p3": User.email}
+    return render_template("information.html", **information)
+
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
     form = AddPostForm()
