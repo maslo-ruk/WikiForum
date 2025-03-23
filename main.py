@@ -24,9 +24,16 @@ def index():
 
 @app.route('/profile')
 def profile():
-    information = {"h5": "alex", "p2": "genius"}
-    # information = {"p1": User.name, "p2":User.about, "p3": User.email}
-    return render_template("information.html", **information)
+    # information = {"h5": "alex", "p2": "genius"}
+    # # information = {"p1": User.name, "p2":User.about, "p3": User.email}
+    # return render_template("information.html", **information)
+    form = AddPostForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        content = form.content.data
+        create_post(name, content)
+        return content
+    return render_template('add_post.html', form=form)
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
