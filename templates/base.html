@@ -18,6 +18,16 @@
         <div class="myheader">
             <h1>WikiForum</h1>
         </div>
+        {% if current_user.is_authenticated %}
+        <div class="header-left">
+            <a href="http://127.0.0.1:8080/account">Личный кабинет</a>
+        </div>
+        {%else%}
+         <div class="header-left">
+            <a href="http://127.0.0.1:8080/login">Войти</a>
+             <a href="http://127.0.0.1:8080/register">Зарегистрироваться</a>
+        </div>
+        {%endif%}
     </nav>
     <h4>{{theme}}</h4>
 </header>

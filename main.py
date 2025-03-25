@@ -12,11 +12,18 @@ from data.forms.posts import AddPostForm
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
 app.config['UPLOAD_FOLDER'] = 'C:\\Users\\egorzhsvor\\PycharmProjects\\WikiForum\\materials'
+login_manager = LoginManager()
+login_manager.init_app(app)
 
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     number = 1
+    session = db_session.create_session()
     if request.method == 'GET':
         return render_template('index.html', number=number)
     elif request.method == 'POST':
@@ -79,6 +86,12 @@ def login():
         login_user(user, remember=form.remember_me.data)
         return redirect('/')
     return render_template('login.html', form=form)
+
+@app.route('post/<title>')
+def post(title):
+    session = db_session.create_session()
+    post = session.query(Post).filter(Post.name == title).first()
+    render_template('post.html', post=post)
 
 
 # @app.route('/')
