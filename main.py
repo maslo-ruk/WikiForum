@@ -24,7 +24,9 @@ def index():
 
 @app.route('/profile')
 def profile():
-    information = {"name": User.name, "about": User.about, "email": User.email, "title": User.name[0]}
+    sess = db_session.create_session()
+    user = sess.query(User).filter(User.id == 1).first()
+    information = {"name": user.name, "about": user.about, "email": user.email, "title": user.name[0]}
     return render_template("information.html", **information)
 
 @app.route('/add_post', methods=['GET', 'POST'])
@@ -35,7 +37,7 @@ def add_post():
         content = form.content.data
         create_post(name, content)
         return content
-    return render_template('add_post.html', form=form)
+    return render_template('add_post.html', form=form, header='Создайте статью')
 
 def create_post(name, content):
     post = Post(name=name, content=content)

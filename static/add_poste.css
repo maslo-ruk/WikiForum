@@ -1,11 +1,11 @@
 .container-fluid h1 {
     font-family: Times New Roman, Arial;
     font-size: 3.5em;
-    color: #660099;
+    color: #ddeeff;
     position: relative;
     text-align: center;
     line-height: 120%;
-    background-color: #7b68ee;
+    background-color: #eca8ff;
 }
 
 .container-fluid .stranica {
