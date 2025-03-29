@@ -5,13 +5,13 @@ import os
 from data import db_session
 from data.users import User
 from data.posts import Post
-
+from data.functions import *
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.forms.posts import AddPostForm
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
-app.config['UPLOAD_FOLDER'] = 'C:\\Users\\egorzhsvor\\PycharmProjects\\WikiForum\\materials'
+app.config['UPLOAD_FOLDER'] = 'materials'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
@@ -20,15 +20,15 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     number = 1
     session = db_session.create_session()
     if request.method == 'GET':
-        return render_template('index.html', number=number)
+        return render_template('index.html', number=number, posts = session.query(Post).all())
     elif request.method == 'POST':
         number += 1
-    return render_template('index.html', number=number)
+    return render_template('index.html', number=number, posts = session.query(Post).all())
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
@@ -36,15 +36,9 @@ def add_post():
     if form.validate_on_submit():
         name = form.label.data
         content = form.content.data
-        create_post(name, content)
+        add_post(name, content, 1)
         return content
     return render_template('add_post.html', form=form)
-
-def create_post(name, content):
-    post = Post(name=name, content=content)
-    db_sess = db_session.create_session()
-    db_sess.add(post)
-    db_sess.commit()
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -87,11 +81,11 @@ def login():
         return redirect('/')
     return render_template('login.html', form=form)
 
-@app.route('post/<title>')
-def post(title):
+@app.route('/post/<id>')
+def post(id):
     session = db_session.create_session()
-    post = session.query(Post).filter(Post.name == title).first()
-    render_template('post.html', post=post)
+    post = session.query(Post).filter(Post.id == id).first()
+    return render_template('post.html', post=post)
 
 
 # @app.route('/')

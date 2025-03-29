@@ -11,16 +11,11 @@
   </nav>
 </aside>
 <main>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
-  <h2 class="mainpagecontent">Статья</h2>
+  {%for post in posts%}
+  <div class="visible-post">
+    <a href={{post.href}}>{{post.title}}</a>
+    <p>{{post.short}}</p>
+  </div>
+  {%endfor%}
 </main>
 {% endblock %}
