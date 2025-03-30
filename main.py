@@ -25,10 +25,10 @@ def index():
     number = 1
     session = db_session.create_session()
     if request.method == 'GET':
-        return render_template('index.html', number=number, posts = session.query(Post).all())
+        return render_template('index.html', number=number, posts = session.query(Post).all(), tags=session.query(Tag).all())
     elif request.method == 'POST':
         number += 1
-    return render_template('index.html', number=number, posts = session.query(Post).all())
+    return render_template('index.html', number=number, posts = session.query(Post).all(), tags=session.query(Tag).all())
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():

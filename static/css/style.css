@@ -44,7 +44,7 @@
 }
 
 .sidenav li:hover {
-    background-color: gray;
+    background-color: red;
 }
 
 header.myheader {
@@ -76,4 +76,25 @@ div.myheader {
 div.header-left {
     display: flex;
     align-items: center;
+}
+
+.headerleft-button a{
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+}
+
+div.headerleft-button {
+    padding: 10px 10px 10px 10px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.header-left div {
+    background-color: black;
+}
+
+.header-left div:hover {
+    background-color: #3d3d3d;
 }

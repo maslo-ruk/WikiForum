@@ -5,11 +5,26 @@ from data.users import User
 from data.tags import Tag
 
 db_session.global_init('db/wikiforum.db')
-# sess = db_session.create_session()
-# add_user('default_user', 'Maslo.Paslo@yandex.ru', 'reS_et11')
-# add_tag('physics')
-# add_post('new rocket model', 'ELon mask made new rocket model, that will likely go to mars', [1], 1)
-# print(sess.query(Post).first().href)
-session = db_session.create_session()
-post = session.query(Post).filter(Post.id == 1).first()
-print(post.content)
+sess = db_session.create_session()
+t = [[1], [2], [3], [3,1], [2,1], [2,3], [2]]
+c = 0
+for i in t:
+    ix = map(str, i)
+    add_post(f'test_post_{c}, tags: {" ".join(ix) }', f'testposttext_{c}', i, 1)
+    c += 1
+sess = db_session.create_session()
+posts = sess.query(Tag).all()
+c = 1
+for i in posts:
+    i.href = f'/tag/{c}'
+    c += 1
+    print(i.href)
+
+# new rocket model, tags: 1
+# test_post_0, tags: 1
+# test_post_1, tags: 2
+# test_post_2, tags: 3
+# test_post_3, tags: 3 1
+# test_post_4, tags: 2 1
+# test_post_5, tags: 2 3
+# test_post_6, tags: 2

@@ -38,9 +38,16 @@ def add_user(name, email, password):
     sess.commit()
 
 
+def find_posts_by_tag(tag_id):
+    sess = db_session.create_session()
+    posts = sess.query(Post).filter(Post.tags.any(id=tag_id)).all()
+    return posts
+
+
 def add_tag(name):
     tag = Tag()
     tag.name = name
     sess = db_session.create_session()
+    tag.href = f'/tag/{len(sess.query(Tag).all()) + 1}'
     sess.add(tag)
     sess.commit()
