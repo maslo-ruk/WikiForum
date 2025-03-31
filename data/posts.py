@@ -17,11 +17,5 @@ class Post(SqlAlchemyBase):
                                   secondary="posts_to_tags",
                                   backref="posts")
     short = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    # tags = orm.relationship(
-    #     'Tag', secondary=post_to_tags,
-    #     primaryjoin=(post_to_tags.c.posts == id),
-    #     secondaryjoin=(post_to_tags.c.tags == id),
-    #     backref=orm.backref('post_to_tags', lazy='dynamic'),
-    #     lazy='dynamic'
-    # )
     href = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    comments = orm.relationship("Comment", back_populates='user')
