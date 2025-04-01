@@ -15,6 +15,11 @@ app.config['UPLOAD_FOLDER'] = 'materials'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     number = 1
@@ -25,6 +30,58 @@ def index():
         number += 1
     return render_template('index.html', number=number, posts = session.query(Post).all(), tags=session.query(Tag).all())
 
+@app.route('/add_post', methods=['GET', 'POST'])
+def add_post():
+    form = AddPostForm()
+    if form.validate_on_submit():
+        name = form.label.data
+        content = form.content.data
+        add_post(name, content, 1)
+        return content
+    return render_template('add_post.html', form=form)
+
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    from data.forms.RegisterForm import RegisterForm
+    form = RegisterForm()
+    session = db_session.create_session()
+    if form.validate_on_submit():
+        name = form.name.data
+        email = form.email.data
+        password1, password2 = form.password.data, form.second_password.data
+        if session.query(User).filter(User.email == email).first():
+            return render_template('register.html', form=form, message='Такой пользователь уже есть!')
+        if password1 != password2:
+            return render_template('register.html', form=form, message='Пароли не совпадают!')
+        user = User()
+        user.fill_data(name, email)
+        user.set_password(password1)
+        session.add(user)
+        session.commit()
+        login_user(user, remember=form.remember_me.data)
+        return redirect('/')
+    return render_template('register.html', form=form)
+
+@app.route('/add_post', methods=['GET', 'POST'])
+def add_post():
+    pass
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    from data.forms.loginform import LoginForm
+    form = LoginForm()
+    session = db_session.create_session()
+    if form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+        if not session.query(User).filter(User.email == email).first():
+            return render_template('register.html', form=form, message='Нет такого пользователя')
+        user = session.query(User).filter(User.email == email).first()
+        if not user.check_password(password):
+            return render_template('register.html', form=form, message='Неверный пароль')
+        login_user(user, remember=form.remember_me.data)
+        return redirect('/')
+    return render_template('login.html', form=form)
 
 @app.route('/post/<id>')
 def post(id):
