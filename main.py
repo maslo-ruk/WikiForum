@@ -67,11 +67,11 @@ def register():
 def add_post():
     form = AddPostForm()
     if form.validate_on_submit():
-        name = form.name.data
+        name = form.label.data
         content = form.content.data
-        create_post(name, content)
+        add_post(name, content, 1)
         return content
-    return render_template('add_post.html', form=form, header='Создайте статью')
+    return render_template('add_post.html', form=form)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
