@@ -8,21 +8,29 @@
           rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
+    <link rel="stylesheet" href="../static/css/style.css">
     <title>{{title}}</title>
 </head>
 <body>
-<header>
+<header class="myheader">
     <!-- https://getbootstrap.com/docs/5.1/components/navbar/ -->
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <h1>Миссия колонизации Марса</h1>
+    <nav class="myheader">
+        <div class="myheader">
+            <h1>WikiForum</h1>
         </div>
+        {% if current_user.is_authenticated %}
+        <div class="header-left">
+            <a href="http://127.0.0.1:8080/account">Личный кабинет</a>
+        </div>
+        {%else%}
+         <div class="header-left">
+            <div class="headerleft-button"><a href="/loginr">Войти</a></div>
+             <div class="headerleft-button"> <a href="/register">Зарегистрироваться</a></div>
+        </div>
+        {%endif%}
     </nav>
-    <h4>И на Марсе будут яблони цвести!</h4>
+    <h4>{{theme}}</h4>
 </header>
-<!--Begin page content-->
-<main role="main" class="container">
-    {% block content %}{% endblock %}
-</main>
+{% block content %}{% endblock %}
 </body>
 </html>
