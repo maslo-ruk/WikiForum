@@ -38,6 +38,12 @@ def post(id):
     return render_template('post.html', post=post)
 
 
+@app.route('/tag/<id>')
+def tag(id):
+    session = db_session.create_session()
+    posts = find_posts_by_tag(id)
+    return render_template('tag_page.html', posts=posts)
+
 # @app.route('/')
 # def main_page():
 #     if current_user.is_authenticated:

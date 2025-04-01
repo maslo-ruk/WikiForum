@@ -5,7 +5,9 @@ from data.users import User
 from data.tags import Tag
 
 db_session.global_init('db/wikiforum.db')
-sess = db_session.create_session()
+add_user('default_user', 'Maslo.Paslo@gmail.com', 'reset')
+for i in range(1,4):
+    add_tag(f'default_tag_{i}')
 t = [[1], [2], [3], [3,1], [2,1], [2,3], [2]]
 c = 0
 for i in t:

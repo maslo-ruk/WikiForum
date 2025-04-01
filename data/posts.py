@@ -18,4 +18,4 @@ class Post(SqlAlchemyBase):
                                   backref="posts")
     short = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     href = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    comments = orm.relationship("Comment", back_populates='user')
+    comments = orm.relationship("Comment", back_populates='post')

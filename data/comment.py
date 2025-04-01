@@ -9,7 +9,7 @@ class Comment(SqlAlchemyBase):
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('User'))
+    user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'))
     user = orm.relationship('User')
-    post_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('Post'))
+    post_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('posts.id'))
     post = orm.relationship('Post')
