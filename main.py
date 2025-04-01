@@ -38,6 +38,7 @@ def tag(id):
     session = db_session.create_session()
     posts = find_posts_by_tag(id)
     return render_template('tag_page.html', posts=posts)
+
 @app.route('/profile')
 def profile():
     sess = db_session.create_session()
