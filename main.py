@@ -65,7 +65,14 @@ def register():
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
-    pass
+    form = AddPostForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        content = form.content.data
+        create_post(name, content)
+        return content
+    return render_template('add_post.html', form=form, header='Создайте статью')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     from data.forms.loginform import LoginForm
