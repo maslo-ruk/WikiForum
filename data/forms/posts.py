@@ -4,7 +4,6 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextA
 from wtforms.validators import DataRequired
 
 class AddPostForm(FlaskForm):
-    name = StringField('Ваш логин', validators=[DataRequired()])
     label = StringField('Название статьи')
     content = TextAreaField('Содержание')
     submit = SubmitField('Создать')
