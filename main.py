@@ -63,15 +63,7 @@ def register():
         return redirect('/')
     return render_template('register.html', form=form)
 
-@app.route('/add_post', methods=['GET', 'POST'])
-def add_post():
-    form = AddPostForm()
-    if form.validate_on_submit():
-        name = form.label.data
-        content = form.content.data
-        add_post(name, content, 1)
-        return content
-    return render_template('add_post.html', form=form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -96,6 +88,11 @@ def post(id):
     post = session.query(Post).filter(Post.id == id).first()
     return render_template('post.html', post=post)
 
+@app.route('/profile')
+def profile():
+    name = "@мой_ник"
+    image = open('static/image/марс.png')
+    return render_template('profile.html', title='Ваш профиль', name=name, image=image)
 
 @app.route('/tag/<id>')
 def tag(id):

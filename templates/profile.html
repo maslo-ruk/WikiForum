@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        .profile-item {
+            margin-bottom: 15px;
+        }
+        .profile-item label {
+            font-weight: bold;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        .back-button {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="buttons"><button class="back-button"><-</button><h1>Профиль пользователя</h1></div>
+
+    <div class="profile-item">
+        <label for="first-name">Имя:</label>
+        <p id="first-name">Иван</p>
+    </div>
+
+    <div class="profile-item">
+        <label for="last-name">Фамилия:</label>
+        <p id="last-name">Иванов</p>
+    </div>
+
+    <div class="profile-item">
+        <label for="email">Электронная почта:</label>
+        <p id="email">ivan.ivanov@example.com</p>
+    </div>
+
+    <div class="profile-item">
+        <label for="phone">Телефон:</label>
+        <p id="phone">+7 (123) 456-78-90</p>
+    </div>
+
+    <div class="buttons">
+        <button class="edit-btn">Редактировать</button>
+        <button class="logout-btn">Выйти</button>
+    </div>
+</div>
+
+</body>
+</html>
+
+{% endblock %}
