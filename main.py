@@ -92,8 +92,8 @@ def post(id):
 def profile():
     name = "@мой_ник"
     email= "почта@ладлыф"
-    image = open('static/image/марс.png')
-    return render_template('profile.html', title='Ваш профиль', name=name, image=image, email=email)
+
+    return render_template('profile.html', title='Ваш профиль', name=name, email=email)
 
 @app.route('/tag/<id>')
 def tag(id):

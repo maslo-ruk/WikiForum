@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Профиль пользователя</title>
     <style>
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -24,6 +25,9 @@
         h1 {
             text-align: center;
         }
+        h2 {
+            margin-top: 100px;
+        }
         .profile-item {
             margin-top: 40px;
         }
@@ -34,6 +38,11 @@
             display: flex;
             justify-content: space-between;
         }
+        .my-image {
+            width: 200px;
+            height: auto;
+        }
+
         button {
             padding: 10px 15px;
             border: none;
@@ -41,15 +50,11 @@
             cursor: pointer;
         }
         .edit-btn {
-            background-color: #007bff;
-            color: white;
-        }
-        .logout-btn {
-            background-color: #dc3545;
+            background-color: #0a0a0a;
             color: white;
         }
         .back-button {
-            background-color: #007bff;
+            background-color: #0a0a0a;
             color: white;
         }
     </style>
@@ -57,10 +62,11 @@
 <body>
 
 <div class="container">
-    <div class="buttons"><button class="back-button"><----</button><h1>Профиль пользователя</h1></div>
+    <div class="buttons"><button type="button" class="back-button"><---</button><h1>Профиль пользователя</h1></div>
 
-    <div class="profile-item">
-        <label for="first-name">{{name}}</label>
+    <div class="buttons">
+        <h2>{{name}}</h2>
+        <img src="static/image/марс.png" class="my-image" alt="..." height="10" width="20" style="border: 3px solid black;">
     </div>
 
 
@@ -70,8 +76,7 @@
     </div>
 
     <div class="buttons">
-        <button class="edit-btn">Редактировать</button>
-        <img src="../static/img/марс.png" alt="здесь должна была быть картинка, но не нашлась">
+        <button type="button" class="edit-btn">Редактировать</button>
     </div>
 </div>
 
