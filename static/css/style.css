@@ -48,7 +48,6 @@
 }
 
 header.myheader {
-    margin: 0;
     position: relative;
     top: 0;
     height: 10%;
@@ -104,6 +103,16 @@ div.headerleft-button {
     background-color: #3d3d3d;
 }
 
-.myheader a {
+div.headerleft-button-big {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.headerleft-button-big a{
     text-decoration: none;
+    font-size: 25px;
+    color: white;
+    font-weight: bold;
+    padding: 20px 20px 20px 20px;
 }

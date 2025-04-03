@@ -15,20 +15,19 @@
 <header class="myheader">
     <!-- https://getbootstrap.com/docs/5.1/components/navbar/ -->
     <nav class="myheader">
-        <div class="myheader">
-            <a href="/"><h1>WikiForum</h1></a>
+        <div class="header-left">
+        <div class="headerleft-button-big">
+            <a href="/">WikiForum</a>
         </div>
         {% if current_user.is_authenticated %}
-        <div class="header-left">
             <div class="headerleft-button"><a href="http://127.0.0.1:8080/account">Личный кабинет</a></div>
             <div class="headerleft-button"><a href="/logout">Выйти</a></div>
-        </div>
         {%else%}
-         <div class="header-left">
             <div class="headerleft-button"><a href="/login">Войти</a></div>
              <div class="headerleft-button"> <a href="/register">Зарегистрироваться</a></div>
-        </div>
+
         {%endif%}
+         </div>
     </nav>
     <h4>{{theme}}</h4>
 </header>
