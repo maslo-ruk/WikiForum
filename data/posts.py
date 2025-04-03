@@ -17,5 +17,6 @@ class Post(SqlAlchemyBase):
                                   secondary="posts_to_tags",
                                   backref="posts")
     short = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    views = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     href = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     comments = orm.relationship("Comment", back_populates='post')

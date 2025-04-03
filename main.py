@@ -1,4 +1,4 @@
-from flask import Flask, url_for, request, render_template, redirect
+from flask import Flask, url_for, request, render_template, redirect, make_response
 from werkzeug.utils import secure_filename
 import json
 import os
@@ -24,11 +24,12 @@ def load_user(user_id):
 def index():
     number = 1
     session = db_session.create_session()
+    posts = session.query(Post).order_by(Post.views)[::-1]
     if request.method == 'GET':
-        return render_template('index.html', number=number, posts = session.query(Post).all(), tags=session.query(Tag).all())
+        return render_template('index.html', number=number, posts = posts, tags=session.query(Tag).all())
     elif request.method == 'POST':
         number += 1
-    return render_template('index.html', number=number, posts = session.query(Post).all(), tags=session.query(Tag).all())
+    return render_template('index.html', number=number, posts = posts, tags=session.query(Tag).all())
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
@@ -54,11 +55,9 @@ def register():
             return render_template('register.html', form=form, message='Такой пользователь уже есть!')
         if password1 != password2:
             return render_template('register.html', form=form, message='Пароли не совпадают!')
-        user = User()
-        user.fill_data(name, email)
-        user.set_password(password1)
-        session.add(user)
-        session.commit()
+        add_user(name, email, password1)
+        session = db_session.create_session()
+        user = session.query(User).all()[-1]
         login_user(user, remember=form.remember_me.data)
         return redirect('/')
     return render_template('register.html', form=form)
@@ -81,10 +80,23 @@ def login():
         return redirect('/')
     return render_template('login.html', form=form)
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
+
 @app.route('/post/<id>')
 def post(id):
     session = db_session.create_session()
     post = session.query(Post).filter(Post.id == id).first()
+    if current_user.is_authenticated:
+        cu = session.query(User).filter(User.id == current_user.id).first()
+        read = cu.read_posts
+        if post not in read:
+            post.views += 1
+            cu.read_posts.append(post)
+    session.commit()
     return render_template('post.html', post=post)
 
 
