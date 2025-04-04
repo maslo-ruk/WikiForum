@@ -28,7 +28,8 @@ def main():
     s = db_session.create_session()
     p = s.query(Post).all()
     for i in p:
-        print(i.views)
+        if 'tags: 2' in i.title:
+            print(i.title)
     s.commit()
 
 main()

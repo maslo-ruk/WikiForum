@@ -28,6 +28,17 @@
 
         {%endif%}
         </div>
+        <div class="headerleft">
+            <form method="post" class="header-form">
+            {{search_form.hidden_tag()}}
+            <p>
+                {{search_form.title.label}}<br>
+                {{search_form.title(class="form-control")}}<br>
+            </p>
+            <p>{{ search_form.submit(type="submit", class="btn btn-primary") }}</p>
+            {{message}}
+            </form>
+        </div>
     </nav>
     <h4>{{theme}}</h4>
 </header>

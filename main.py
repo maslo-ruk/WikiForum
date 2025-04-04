@@ -1,14 +1,7 @@
-from flask import Flask, url_for, request, render_template, redirect, make_response
-from werkzeug.utils import secure_filename
-import json
-import os
-from data import db_session
-from data.users import User
-from data.posts import Post
+from flask import Flask, request, render_template, redirect
 from data.functions import *
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
-from data.forms.posts import AddPostForm
-
+from data.forms import *
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
 app.config['UPLOAD_FOLDER'] = 'materials'
@@ -22,14 +15,27 @@ def load_user(user_id):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    number = 1
+    s_form = SearchPostForm()
     session = db_session.create_session()
     posts = session.query(Post).order_by(Post.views)[::-1]
-    if request.method == 'GET':
-        return render_template('index.html', number=number, posts = posts, tags=session.query(Tag).all())
-    elif request.method == 'POST':
-        number += 1
-    return render_template('index.html', number=number, posts = posts, tags=session.query(Tag).all())
+    if s_form.validate_on_submit():
+        text = s_form.title.data
+        return redirect(f'/search/{text}')
+    return render_template('index.html', search_form=s_form, posts = posts, tags=session.query(Tag).all())
+
+@app.route('/search/<text>',  methods=['GET', 'POST'])
+def search(text):
+    s_form = SearchPostForm()
+    if s_form.validate_on_submit():
+        ttext = s_form.title.data
+        return redirect(f'/search/{ttext}')
+    session= db_session.create_session()
+    posts = session.query(Post).order_by(Post.views)[::-1]
+    right_posts = []
+    for i in posts:
+        if text in i.title or text in i.content:
+            right_posts.append(i)
+    return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
@@ -44,7 +50,6 @@ def add_post():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    from data.forms.RegisterForm import RegisterForm
     form = RegisterForm()
     session = db_session.create_session()
     if form.validate_on_submit():
@@ -65,7 +70,6 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    from data.forms.loginform import LoginForm
     form = LoginForm()
     session = db_session.create_session()
     if form.validate_on_submit():
@@ -105,13 +109,6 @@ def tag(id):
     session = db_session.create_session()
     posts = find_posts_by_tag(id)
     return render_template('tag_page.html', posts=posts)
-
-# @app.route('/')
-# def main_page():
-#     if current_user.is_authenticated:
-#         print('d')
-#     else:
-#         print('f')
 
 
 def main():

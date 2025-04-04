@@ -50,7 +50,7 @@
 header.myheader {
     position: relative;
     top: 0;
-    height: 10%;
+    height: 10vh;
     width : 100%
 }
 
@@ -115,4 +115,9 @@ div.headerleft-button-big {
     color: white;
     font-weight: bold;
     padding: 20px 20px 20px 20px;
+}
+
+form.header-form {
+    display:flex;
+    align-items: center;
 }
