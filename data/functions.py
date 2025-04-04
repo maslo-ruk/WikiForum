@@ -35,7 +35,6 @@ def add_user(name, email, password):
     user.set_password(password)
     sess.add(user)
     sess.commit()
-    sess.commit()
 
 
 def find_posts_by_tag(tag_id):
