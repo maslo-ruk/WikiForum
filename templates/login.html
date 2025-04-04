@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <main>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        <p>
+            {{form.email.label}}<br>
+            {{form.email()}}
+            {%for i in form.email.errors%}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+            {%endfor%}
+        </p>
+        <p>
+            {{form.password.label}}<br>
+            {{form.password()}}
+            {%for i in form.password.errors%}
+            <p class="alert alert-danger" role="alert">
+                {{ error }}
+            </p>
+            {%endfor%}
+        </p>
+        <div>
+            <p>
+                {{ form.remember_me() }} {{ form.remember_me.label }}
+            </p>
+        </div>
+        <div>
+            <p>
+                {{form.submit(type='submit')}}
+            </p>
+        </div>
+        {{message}}
+    </form>
+    </main>
+{% endblock %}

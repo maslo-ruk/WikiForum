@@ -4,23 +4,35 @@ from data.posts import Post
 from data.users import User
 from data.tags import Tag
 
-db_session.global_init('db/wikiforum.db')
-add_user('default_user', 'Maslo.Paslo@gmail.com', 'reset')
-for i in range(1,4):
-    add_tag(f'default_tag_{i}')
-t = [[1], [2], [3], [3,1], [2,1], [2,3], [2]]
-c = 0
-for i in t:
-    ix = map(str, i)
-    add_post(f'test_post_{c}, tags: {" ".join(ix) }', f'testposttext_{c}', i, 1)
-    c += 1
-sess = db_session.create_session()
-posts = sess.query(Tag).all()
-c = 1
-for i in posts:
-    i.href = f'/tag/{c}'
-    c += 1
-    print(i.href)
+def make_db():
+    db_session.global_init('db/wikiforum.db')
+    add_user('default_user', 'Maslo.Paslo@gmail.com', 'reset')
+    for i in range(1,4):
+        add_tag(f'default_tag_{i}')
+    t = [[1], [2], [3], [3,1], [2,1], [2,3], [2]]
+    c = 0
+    for i in t:
+        ix = map(str, i)
+        add_post(f'test_post_{c}, tags: {" ".join(ix) }', f'testposttext_{c}', i, 1)
+        c += 1
+    sess = db_session.create_session()
+    posts = sess.query(Tag).all()
+    c = 1
+    for i in posts:
+        i.href = f'/tag/{c}'
+        c += 1
+        print(i.href)
+
+def main():
+    db_session.global_init('db/wikiforum.db')
+    s = db_session.create_session()
+    p = s.query(Post).all()
+    for i in p:
+        if 'tags: 2' in i.title:
+            print(i.title)
+    s.commit()
+
+main()
 
 # new rocket model, tags: 1
 # test_post_0, tags: 1
