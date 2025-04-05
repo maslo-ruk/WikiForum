@@ -123,10 +123,11 @@ def post(id):
     session.commit()
     return render_template('post.html', post=post)
 
-@app.route('/profile/int:user_id>', methods=['GET']) #не работает (((((((
+@app.route('/profile')
 def profile():
     user_id = current_user.id
-    user = get_user_by_id(user_id)
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
     print(user)
     email = "почта@ладлыф"
     return render_template('profile.html', title='Ваш профиль', email=email)
