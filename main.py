@@ -124,10 +124,10 @@ def post(id):
     return render_template('post.html', post=post)
 
 @app.route('/profile/int:user_id>', methods=['GET']) #не работает (((((((
-def profile(user_id):
-    session = db_session.create_session()
-    posts = find_posts_by_tag(user_id)
-    print(posts)
+def profile():
+    user_id = current_user.id
+    user = get_user_by_id(user_id)
+    print(user)
     email = "почта@ладлыф"
     return render_template('profile.html', title='Ваш профиль', email=email)
 

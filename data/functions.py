@@ -42,10 +42,6 @@ def find_posts_by_tag(tag_id):
     posts = sess.query(Post).filter(Post.tags.any(id=tag_id)).all()
     return posts
 
-def find_user_by_tag(user_id):
-    sess = db_session.create_session()
-    user = sess.query(User).filter(Post.tags.any(id=user_id)).all()
-    return user
 
 def add_tag(name):
     tag = Tag()
@@ -54,3 +50,6 @@ def add_tag(name):
     tag.href = f'/tag/{len(sess.query(Tag).all()) + 1}'
     sess.add(tag)
     sess.commit()
+
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
