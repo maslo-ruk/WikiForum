@@ -1,7 +1,8 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from data.functions import *
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.forms import *
+
 from werkzeug.utils import secure_filename
 import json
 import os
@@ -14,6 +15,7 @@ app.config['SECRET_KEY'] = 'FSFAFDSA'
 app.config['UPLOAD_FOLDER'] = 'materials'
 login_manager = LoginManager()
 login_manager.init_app(app)
+db_session.global_init("db/wikiforum.db")
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -121,12 +123,13 @@ def post(id):
     session.commit()
     return render_template('post.html', post=post)
 
-@app.route('/profile')
-def profile():
-    name = "@мой_ник"
-    email= "почта@ладлыф"
-
-    return render_template('profile.html', title='Ваш профиль', name=name, email=email)
+@app.route('/profile/int:user_id>', methods=['GET']) #не работает (((((((
+def profile(user_id):
+    session = db_session.create_session()
+    posts = find_posts_by_tag(user_id)
+    print(posts)
+    email = "почта@ладлыф"
+    return render_template('profile.html', title='Ваш профиль', email=email)
 
 @app.route('/tag/<id>')
 def tag(id):
