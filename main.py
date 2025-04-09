@@ -128,9 +128,9 @@ def profile():
     user_id = current_user.id
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == user_id).first()
-    print(user)
+    nick_name = user
     email = "почта@ладлыф"
-    return render_template('profile.html', title='Ваш профиль', email=email)
+    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email)
 
 @app.route('/tag/<id>')
 def tag(id):
