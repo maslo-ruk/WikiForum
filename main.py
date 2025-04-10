@@ -1,12 +1,21 @@
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, jsonify
 from data.functions import *
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.forms import *
+
+from werkzeug.utils import secure_filename
+import json
+import os
+from data import db_session
+from data.users import User
+from data.posts import Post
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
 app.config['UPLOAD_FOLDER'] = 'materials'
 login_manager = LoginManager()
 login_manager.init_app(app)
+db_session.global_init("db/wikiforum.db")
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -38,7 +47,7 @@ def search(text):
     return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
 @app.route('/add_post', methods=['GET', 'POST'])
-def add_post():
+def add_post_web():
     form = AddPostForm()
     if form.validate_on_submit():
         name = form.label.data
@@ -90,6 +99,17 @@ def logout():
     logout_user()
     return redirect("/")
 
+@app.route('/add_post', methods=['GET', 'POST'])
+def add_post():
+    form = AddPostForm()
+    if form.validate_on_submit():
+        name = form.label.data
+        content = form.content.data
+        add_post(name, content, 1)
+        return content
+    return render_template('add_post.html', form=form)
+
+
 @app.route('/post/<id>')
 def post(id):
     session = db_session.create_session()
@@ -103,6 +123,14 @@ def post(id):
     session.commit()
     return render_template('post.html', post=post)
 
+@app.route('/profile')
+def profile():
+    user_id = current_user.id
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    nick_name = user
+    email = "почта@ладлыф"
+    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email)
 
 @app.route('/tag/<id>')
 def tag(id):

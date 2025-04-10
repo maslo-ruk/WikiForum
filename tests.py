@@ -24,9 +24,7 @@ def make_db():
         print(i.href)
 
 def main():
-    db_session.global_init('db/wikiforum.db')
-    d = db_session.create_session()
-    print(d.query(User).first().email)
+    make_db()
 
 main()
 

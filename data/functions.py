@@ -50,3 +50,6 @@ def add_tag(name):
     tag.href = f'/tag/{len(sess.query(Tag).all()) + 1}'
     sess.add(tag)
     sess.commit()
+
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
