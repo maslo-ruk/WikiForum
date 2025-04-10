@@ -25,12 +25,8 @@ def make_db():
 
 def main():
     db_session.global_init('db/wikiforum.db')
-    s = db_session.create_session()
-    p = s.query(Post).all()
-    for i in p:
-        if 'tags: 2' in i.title:
-            print(i.title)
-    s.commit()
+    d = db_session.create_session()
+    print(d.query(User).first().email)
 
 main()
 

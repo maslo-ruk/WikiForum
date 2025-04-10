@@ -76,10 +76,10 @@ def login():
         email = form.email.data
         password = form.password.data
         if not session.query(User).filter(User.email == email).first():
-            return render_template('register.html', form=form, message='Нет такого пользователя')
+            return render_template('login.html', form=form, message='Нет такого пользователя')
         user = session.query(User).filter(User.email == email).first()
         if not user.check_password(password):
-            return render_template('register.html', form=form, message='Неверный пароль')
+            return render_template('login.html', form=form, message='Неверный пароль')
         login_user(user, remember=form.remember_me.data)
         return redirect('/')
     return render_template('login.html', form=form)

@@ -20,7 +20,7 @@
             <a href="/">WikiForum</a>
         </div>
         {% if current_user.is_authenticated %}
-            <div class="headerleft-button"><a href="http://127.0.0.1:8080/account">Личный кабинет</a></div>
+            <div class="headerleft-button"><a href="/profile">Личный кабинет</a></div>
             <div class="headerleft-button"><a href="/logout">Выйти</a></div>
         {%else%}
             <div class="headerleft-button"><a href="/login">Войти</a></div>
