@@ -91,6 +91,11 @@ def logout():
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
+    # form = AddPostForm
+    # if form.validate_on_submit:
+    #     if form.files.data:
+    #         for file in form.files.data:
+    #             print(file.filename) тут должна быть работа с получение файлов но я тупая
     return render_template('add_post-2.html', post=post)
 
 
