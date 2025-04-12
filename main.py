@@ -46,16 +46,6 @@ def search(text):
             right_posts.append(i)
     return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
-@app.route('/add_post', methods=['GET', 'POST'])
-def add_post_web():
-    form = AddPostForm()
-    if form.validate_on_submit():
-        name = form.label.data
-        content = form.content.data
-        add_post(name, content, 1)
-        return content
-    return render_template('add_post.html', form=form)
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -101,13 +91,7 @@ def logout():
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
-    form = AddPostForm()
-    if form.validate_on_submit():
-        name = form.label.data
-        content = form.content.data
-        add_post(name, content, 1)
-        return content
-    return render_template('add_post.html', form=form)
+    return render_template('add_post-2.html', post=post)
 
 
 @app.route('/post/<id>')
