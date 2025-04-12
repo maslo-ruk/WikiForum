@@ -114,12 +114,14 @@ def post(id):
 @app.route('/account')
 def account():
     user_id = current_user.id
+    user_email = current_user.email
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == user_id).first()
-    nick_name = user.name
-    photo = user.photo_path
-    email = user.email
-    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email, photo=photo)
+    email = db_sess.query(User).filter(User.email == user_email).first()
+    nick_name = str(user)
+    emaill = str(email)
+    email = "почта@ладлыф"
+    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email)
 
 @app.route('/tag/<id>')
 def tag(id):
