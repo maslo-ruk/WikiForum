@@ -14,7 +14,6 @@ class AddPostForm(FlaskForm):
     label = StringField('Название статьи')
     content = TextAreaField('Содержание', validators=[InputRequired()])
     tegs = TextAreaField('Теги', validators=[InputRequired()])
-    files = ('Загруженные файлы', validators=[DataRequired()])
     submit = SubmitField('Создать')
 
 

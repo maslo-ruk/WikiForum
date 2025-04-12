@@ -91,13 +91,13 @@ def logout():
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
-    # form = AddPostForm
-    # if form.validate_on_submit:
-    #     if form.files.data:
-    #         for file in form.files.data:
-    #             print(file.filename) тут должна быть работа с получение файлов но я тупая
-    return render_template('add_post-2.html', post=post)
-
+    form = AddPostForm()
+    if form.validate_on_submit():
+        name = form.label.data
+        content = form.content.data
+        add_post(name, content, 1)
+        return redirect(f'/account') #не работает ничего лол
+    return render_template('add_post-2.html', post=post, form=form)
 
 @app.route('/post/<id>')
 def post(id):
@@ -112,7 +112,7 @@ def post(id):
     session.commit()
     return render_template('post.html', post=post)
 
-@app.route('/profile')
+@app.route('/account')
 def profile():
     user_id = current_user.id
     db_sess = db_session.create_session()
