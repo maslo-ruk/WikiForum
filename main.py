@@ -96,7 +96,6 @@ def add_post():
         name = form.label.data
         content = form.content.data
         add_post(name, content, 1)
-        return redirect(f'/account') #не работает ничего лол
     return render_template('add_post-2.html', post=post, form=form)
 
 @app.route('/post/<id>')

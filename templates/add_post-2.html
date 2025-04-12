@@ -11,12 +11,12 @@
 <body>
     <div class="container">
         <button type="button" class="btn-close" aria-label="Close"></button><h1>Добавить пост</h1>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
+        <form action="/" method="POST" enctype="multipart/form-data">
             <input type="text" name="title" placeholder="Заголовок" required>
             <textarea id="story" name="story" autocorrect="on" placeholder="Содержание статьи" rows="10" cols="33" ></textarea>
             <input type="text" name="tags" placeholder="Теги" required>
             <input type="file" name="files" multiple accept="image/*" required>
-            <button type="submit" href="/account">Добавить пост &#x1F525</button>
+            <button type="submit">Добавить пост &#x1F525</button>
         </form>
     </div>
 </body>
