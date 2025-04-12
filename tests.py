@@ -25,7 +25,7 @@ def make_db():
         print(i.href)
 
 def main():
-    print(requests.get('http://127.0.0.1:8080/posts').json())
+    print(requests.get('http://127.0.0.1:8080/posts/1').json())
 main()
 
 # new rocket model, tags: 1
