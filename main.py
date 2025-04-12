@@ -74,6 +74,23 @@ def register():
         return redirect('/')
     return render_template('register.html', form=form)
 
+@app.route('/post/<id>', methods=['GET', 'POST'])
+def post(id):
+    session = db_session.create_session()
+    post = session.query(Post).filter(Post.id == id).first()
+    comment_form = AddCommentForm()
+    if comment_form.validate_on_submit():
+        comment = comment_form.content.data
+
+    if current_user.is_authenticated:
+        cu = session.query(User).filter(User.id == current_user.id).first()
+        read = cu.read_posts
+        if post not in read:
+            post.views += 1
+            cu.read_posts.append(post)
+    session.commit()
+    return render_template('post.html', post=post, comment_form=comment_form)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -108,18 +125,7 @@ def add_post_web():
     return render_template('add_post.html', form=form)
 
 
-@app.route('/post/<id>')
-def post(id):
-    session = db_session.create_session()
-    post = session.query(Post).filter(Post.id == id).first()
-    if current_user.is_authenticated:
-        cu = session.query(User).filter(User.id == current_user.id).first()
-        read = cu.read_posts
-        if post not in read:
-            post.views += 1
-            cu.read_posts.append(post)
-    session.commit()
-    return render_template('post.html', post=post)
+
 
 @app.route('/profile')
 def profile():
