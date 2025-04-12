@@ -20,3 +20,6 @@ class Post(SqlAlchemyBase):
     views = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     href = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     comments = orm.relationship("Comment", back_populates='post')
+
+    def to_dict(self):
+        return {'title': Post.title, 'content': Post.content, 'user_id':Post.user_id, 'views': Post.views}

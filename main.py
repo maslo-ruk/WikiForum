@@ -1,7 +1,10 @@
 from flask import Flask, request, render_template, redirect, jsonify
 from data.functions import *
+from data.posts_api import PostResourse, PostListResource
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.forms import *
+from flask_restful import reqparse, abort, Api, Resource
+
 
 from werkzeug.utils import secure_filename
 import json
@@ -11,6 +14,7 @@ from data.users import User
 from data.posts import Post
 
 app = Flask(__name__)
+news_api = Api(app)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
 app.config['UPLOAD_FOLDER'] = 'materials'
 login_manager = LoginManager()
@@ -139,8 +143,11 @@ def tag(id):
     return render_template('tag_page.html', posts=posts)
 
 
+
 def main():
     db_session.global_init('db/wikiforum.db')
+    news_api.add_resource(PostResourse, '/posts/<int:post_id>')
+    news_api.add_resource(PostListResource, '/posts')
     app.run(port=8080, host='127.0.0.1')
 
 if __name__ == '__main__':

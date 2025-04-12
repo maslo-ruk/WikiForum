@@ -3,6 +3,7 @@ from data.functions import add_user, add_tag, add_post
 from data.posts import Post
 from data.users import User
 from data.tags import Tag
+import requests
 
 def make_db():
     db_session.global_init('db/wikiforum.db')
@@ -24,8 +25,7 @@ def make_db():
         print(i.href)
 
 def main():
-    make_db()
-
+    print(requests.get('http://127.0.0.1:8080/posts').json())
 main()
 
 # new rocket model, tags: 1
