@@ -22,6 +22,7 @@ class User(SqlAlchemyBase, UserMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
+    photo_path = sqlalchemy.Column(sqlalchemy.String, default='static/image/profile_pictures/0.jpg')
 
     posts = orm.relationship("Post", back_populates='user')
     comments = orm.relationship("Comment", back_populates='user')

@@ -53,3 +53,8 @@ def add_tag(name):
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+
+def allowed_file(filename):
+    print(filename.rsplit('.', 1)[1])
+    print('.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS, 1)
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

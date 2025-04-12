@@ -9,10 +9,12 @@ import os
 from data import db_session
 from data.users import User
 from data.posts import Post
+from data.config import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
-app.config['UPLOAD_FOLDER'] = 'materials'
+UPLOAD_FOLDER = 'static/image/profile_pictures'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 login_manager = LoginManager()
 login_manager.init_app(app)
 db_session.global_init("db/wikiforum.db")
@@ -61,19 +63,31 @@ def add_post_web():
 def register():
     form = RegisterForm()
     session = db_session.create_session()
-    if form.validate_on_submit():
-        name = form.name.data
-        email = form.email.data
-        password1, password2 = form.password.data, form.second_password.data
-        if session.query(User).filter(User.email == email).first():
-            return render_template('register.html', form=form, message='Такой пользователь уже есть!')
-        if password1 != password2:
-            return render_template('register.html', form=form, message='Пароли не совпадают!')
-        add_user(name, email, password1)
-        session = db_session.create_session()
-        user = session.query(User).all()[-1]
-        login_user(user, remember=form.remember_me.data)
-        return redirect('/')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            name = form.name.data
+            email = form.email.data
+            password1, password2 = form.password.data, form.second_password.data
+            if session.query(User).filter(User.email == email).first():
+                return render_template('register.html', form=form, message='Такой пользователь уже есть!')
+            if password1 != password2:
+                return render_template('register.html', form=form, message='Пароли не совпадают!')
+            add_user(name, email, password1)
+            session = db_session.create_session()
+            user = session.query(User).all()[-1]
+            try:
+                file = request.files['file']
+                if file and allowed_file(file.filename):
+                    photo = f'{user.id}.{file.filename.rsplit(".", 1)[1]}'
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], photo))
+                    user.photo_path = f'static/image/profile_pictures/{photo}'
+                else:
+                    photo = STANDART_PHOTO
+            except Exception:
+                photo = STANDART_PHOTO
+            login_user(user, remember=form.remember_me.data)
+            session.commit()
+            return redirect('/')
     return render_template('register.html', form=form)
 
 
@@ -128,9 +142,10 @@ def profile():
     user_id = current_user.id
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == user_id).first()
-    nick_name = user
-    email = "почта@ладлыф"
-    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email)
+    nick_name = user.name
+    photo = user.photo_path
+    email = user.email
+    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email, photo=photo)
 
 @app.route('/tag/<id>')
 def tag(id):
