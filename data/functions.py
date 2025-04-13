@@ -22,6 +22,7 @@ def add_post(title, content, tags, user):
     post.href = f'/post/{len(sess.query(Post).all())+1}'
     sess.add(post)
     sess.commit()
+    sess.close()
 
 def add_user(name, email, password):
     user = User()
@@ -35,11 +36,13 @@ def add_user(name, email, password):
     user.set_password(password)
     sess.add(user)
     sess.commit()
+    sess.close()
 
 
 def find_posts_by_tag(tag_id):
     sess = db_session.create_session()
     posts = sess.query(Post).filter(Post.tags.any(id=tag_id)).all()
+    sess.close()
     return posts
 
 
@@ -50,6 +53,7 @@ def add_tag(name):
     tag.href = f'/tag/{len(sess.query(Tag).all()) + 1}'
     sess.add(tag)
     sess.commit()
+    sess.close()
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)

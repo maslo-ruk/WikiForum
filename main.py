@@ -32,6 +32,7 @@ def index():
     if s_form.validate_on_submit():
         text = s_form.title.data
         return redirect(f'/search/{text}')
+    session.close()
     return render_template('index.html', search_form=s_form, posts = posts, tags=session.query(Tag).all())
 
 @app.route('/search/<text>',  methods=['GET', 'POST'])
@@ -46,6 +47,7 @@ def search(text):
     for i in posts:
         if text in i.title or text in i.content:
             right_posts.append(i)
+    session.close()
     return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
 @app.route('/add_post', methods=['GET', 'POST'])
@@ -87,7 +89,9 @@ def register():
                 photo = STANDART_PHOTO
             login_user(user, remember=form.remember_me.data)
             session.commit()
+            session.close()
             return redirect('/')
+    session.close()
     return render_template('register.html', form=form)
 
 
@@ -104,7 +108,11 @@ def login():
         if not user.check_password(password):
             return render_template('login.html', form=form, message='Неверный пароль')
         login_user(user, remember=form.remember_me.data)
+        session.commit()
+        session.close()
         return redirect('/')
+    session.commit()
+    session.close()
     return render_template('login.html', form=form)
 
 @app.route('/logout')
@@ -134,7 +142,7 @@ def post(id):
         if post not in read:
             post.views += 1
             cu.read_posts.append(post)
-    session.commit()
+    session.close()
     return render_template('post.html', post=post)
 
 @app.route('/profile')
@@ -145,12 +153,14 @@ def profile():
     nick_name = user.name
     photo = user.photo_path
     email = user.email
+    db_sess.close()
     return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email, photo=photo)
 
 @app.route('/tag/<id>')
 def tag(id):
     session = db_session.create_session()
     posts = find_posts_by_tag(id)
+    session.close()
     return render_template('tag_page.html', posts=posts)
 
 

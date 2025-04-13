@@ -1,6 +1,7 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
+from sqlalchemy import NullPool
 
 SqlAlchemyBase = orm.declarative_base()
 
@@ -17,7 +18,7 @@ def global_init(db_name):
     adress = f'sqlite:///{db_name.strip()}?check_same_thread=False'
     print(f"Подключение к базе данных по адресу {adress}")
 
-    engine = sa.create_engine(adress, echo=False)
+    engine = sa.create_engine(adress, echo=False, poolclass=NullPool)
     __factory = orm.sessionmaker(bind=engine)
     from . import _all_models
     SqlAlchemyBase.metadata.create_all(engine)

@@ -24,7 +24,12 @@ def make_db():
         print(i.href)
 
 def main():
-    make_db()
+    db_session.global_init('db/wikiforum.db')
+    session = db_session.create_session()
+    post = session.query(Post).all()
+    session.commit()
+    session.close()
+    print(post[1].id)
 
 main()
 
