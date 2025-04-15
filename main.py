@@ -91,12 +91,10 @@ def logout():
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
-    form = AddPostForm()
-    if form.validate_on_submit():
-        name = form.label.data
-        content = form.content.data
-        add_post(name, content, 1)
-    return render_template('add_post-2.html', post=post, form=form)
+    name = request.form['title']
+    story = request.form["story"]
+    add_post(name, story, [1], 1)
+    return render_template('add_post-2.html', post=post)
 
 @app.route('/post/<id>')
 def post(id):
