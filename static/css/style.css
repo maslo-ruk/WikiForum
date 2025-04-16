@@ -146,7 +146,7 @@ h1 {
     color: #000305;
 }
 
-form {
+form.addpost-form {
     display: flex;
     flex-direction: column;
 }

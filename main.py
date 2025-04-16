@@ -54,15 +54,15 @@ def search(text):
     session.close()
     return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
-@app.route('/add_post', methods=['GET', 'POST'])
-def add_post_web():
-    form = AddPostForm()
-    if form.validate_on_submit():
-        name = form.label.data
-        content = form.content.data
-        add_post(name, content, 1)
-        return content
-    return render_template('add_post.html', form=form)
+# @app.route('/add_post', methods=['GET', 'POST'])
+# def add_post_web():
+#     form = AddPostForm()
+#     if form.validate_on_submit():
+#         name = form.label.data
+#         content = form.content.data
+#         add_post(name, content, 1)
+#         return content
+#     return render_template('add_post.html', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -126,11 +126,12 @@ def logout():
     return redirect("/")
 
 @app.route('/add_post', methods=['GET', 'POST'])
-def add_post():
-    name = request.form['title']
-    story = request.form["story"]
-    add_post(name, story, [1], 1)
-    return render_template('add_post-2.html', post=post)
+def add_postt():
+    if request.method == 'POST':
+        name = request.form['title']
+        story = request.form["story"]
+        add_post(name, story, [1], 1)
+    return render_template('add_post-2.html')
 
 @app.route('/post/<id>')
 def post(id):
@@ -165,7 +166,7 @@ def like(id):
         session.commit()
     return redirect(f'/post/{id}')
 
-@app.route('/account')
+@app.route('/profile')
 def account():
     user_id = current_user.id
     db_sess = db_session.create_session()

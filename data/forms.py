@@ -11,7 +11,7 @@ class LoginForm(FlaskForm):
 
 
 class AddPostForm(FlaskForm):
-    label = StringField('Название статьи')
+    title = StringField('Название статьи')
     content = TextAreaField('Содержание', validators=[InputRequired()])
     tegs = TextAreaField('Теги', validators=[InputRequired()])
     submit = SubmitField('Создать')
