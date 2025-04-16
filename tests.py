@@ -24,7 +24,8 @@ def make_db():
         print(i.href)
 
 def main():
-    make_db()
+    db_session.global_init('db/wikiforum.db')
+    print(add_post(f'test_post_{7}, tags: {" ".join(['1']) }', f'testposttext_{7}', [1], 1).title)
 
 main()
 

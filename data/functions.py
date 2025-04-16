@@ -25,7 +25,7 @@ def add_post(title, content, tags, user):
     post.href = f'/post/{len(sess.query(Post).all())+1}'
     sess.add(post)
     sess.commit()
-    sess.close()
+    return post
 
 def add_user(name, email, password):
     user = User()

@@ -19,7 +19,7 @@ from data.config import *
 app = Flask(__name__)
 news_api = Api(app)
 app.config['SECRET_KEY'] = 'FSFAFDSA'
-UPLOAD_FOLDER = 'static/image/profile_pictures'
+UPLOAD_FOLDER = 'static/image'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -84,10 +84,10 @@ def register():
             session = db_session.create_session()
             user = session.query(User).all()[-1]
             try:
-                file = request.files['file']
+                file = request.files['files']
                 if file and allowed_file(file.filename):
                     photo = f'{user.id}.{file.filename.rsplit(".", 1)[1]}'
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], photo))
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/profile_pictures', photo))
                     user.photo_path = f'static/image/profile_pictures/{photo}'
                 else:
                     photo = STANDART_PHOTO
@@ -129,24 +129,38 @@ def logout():
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_postt():
-    if request.method == 'POST':
-        name = request.form['title']
-        story = request.form["story"]
-        files = request.form["files"]
-        idd = current_user.id
-        add_post(name, story, [1], 1)
-        for i, file in enumerate(files):
-            if os.path.isfile(file) and file.lower().endswith('.png'): #проверка файла
-                filename = os.path.basename(file)
-                name, tg = os.path.splitext(filename)
-                if len(files) > 1:
-                    filename_pic = f"{idd}_{name}_({index + 1}).png"
-                else:
-                    filename_pic = f"{idd}_{name}.png"
-                shutil.copy(file, os.path.join('images', filename_pic))
-            else:
-                print(f"Такого файла нет")
-    return render_template('add_post-2.html')
+    if current_user.is_authenticated:
+        if request.method == 'POST':
+            name = request.form['title']
+            story = request.form["story"]
+            files = request.files.getlist("files")
+            idd = current_user.id
+            post = Post()
+            post.set_values(name, story, [1], idd)
+            session = db_session.create_session()
+            session.add(post)
+            count = 0
+            for file in files:
+                count += 1
+                try:
+                    if file and allowed_file(file.filename):
+                        photo = f'{post.id}_{count}.{file.filename.rsplit(".", 1)[1]}'
+                        file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/post_pictures', photo))
+                    else:
+                        photo = STANDART_PHOTO
+                except Exception:
+                    pass
+            session.commit()
+            session.close()
+        return render_template('add_post-2.html')
+    else:
+        return redirect('/not_authenticated')
+
+
+@app.route('/not_authenticated')
+def not_authenticated():
+    return render_template('not_authenticated.html')
+
 
 @app.route('/post/<id>')
 def post(id):
