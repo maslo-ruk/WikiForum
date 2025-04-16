@@ -1,3 +1,5 @@
+import shutil
+
 from flask import Flask, request, render_template, redirect, jsonify
 from data.functions import *
 from data.posts_api import PostResourse, PostListResource
@@ -127,11 +129,23 @@ def logout():
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_postt():
-    if request.method == 'POST':
-        name = request.form['title']
-        story = request.form["story"]
-        add_post(name, story, [1], 1)
-    return render_template('add_post-2.html')
+    name = request.form['title']
+    story = request.form["story"]
+    files = request.form["files"]
+    idd = current_user.id
+    add_post(name, story, [1], 1)
+    for i, file in enumerate(files):
+        if os.path.isfile(file) and file.lower().endswith('.png'): #проверка файла
+            filename = os.path.basename(file)
+            name, tg = os.path.splitext(filename)
+            if len(files) > 1:
+                filename_pic = f"{idd}_{name}_({index + 1}).png"
+            else:
+                filename_pic = f"{idd}_{name}.png"
+            shutil.copy(file, os.path.join('images', filename_pic))
+        else:
+            print(f"Такого файла нет")
+    return render_template('add_post-2.html', post=post)
 
 @app.route('/post/<id>')
 def post(id):
@@ -183,7 +197,6 @@ def tag(id):
     posts = find_posts_by_tag(id)
     session.close()
     return render_template('tag_page.html', posts=posts)
-
 
 
 def main():
