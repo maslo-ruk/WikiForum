@@ -131,10 +131,13 @@ def account():
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == user_id).first()
     email = db_sess.query(User).filter(User.email == user_email).first()
-    nick_name = str(user)
-    emaill = str(email)
-    email = "почта@ладлыф"
-    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email)
+    # nick_name = str(user)
+    # emaill = str(email)
+    # email = "почта@ладлыф"
+
+    #Егор, смерджи только liked_post и форму профиля
+    liked_post =
+    return render_template('profile.html', title='Ваш профиль', name="...", email=email, liked_posts=["пост1", "пост2"])
 
 @app.route('/tag/<id>')
 def tag(id):

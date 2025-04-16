@@ -57,6 +57,10 @@
             background-color: #0a0a0a;
             color: white;
         }
+        a {
+           display: block;
+           margin: 10px 0;
+           text-decoration: none;
     </style>
 </head>
 <body>
@@ -66,7 +70,7 @@
 
     <div class="buttons">
         <h2>{{name}}</h2>
-        <img src="static/image/марс.png" class="my-image" alt="..." height="10" width="20" style="border: 3px solid black;">
+        <img src="static/image/марс.png" class="my-image" alt="..." height="10" width="50" style="border: 3px solid black;">
     </div>
 
 
@@ -78,6 +82,11 @@
     <div class="buttons">
         <button type="button" class="edit-btn">Редактировать</button>
     </div>
+    <h1>Понравившиеся посты:</h1>
+    <div class="like-container">
+        {% for post in liked_posts %}
+            <a href="{{ post }}" target="_blank">{{ post }}</a>
+        {% endfor %}
 </div>
 
 </body>
