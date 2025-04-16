@@ -136,14 +136,34 @@ def add_post():
 def post(id):
     session = db_session.create_session()
     post = session.query(Post).filter(Post.id == id).first()
+    button_text = 'Нравится'
     if current_user.is_authenticated:
         cu = session.query(User).filter(User.id == current_user.id).first()
         read = cu.read_posts
         if post not in read:
             post.views += 1
             cu.read_posts.append(post)
+        if post not in cu.liked_posts:
+            button_text = 'Нравится'
+        else:
+            button_text = 'Убрать из понравившегося'
     session.close()
-    return render_template('post.html', post=post)
+    return render_template('post.html', post=post, p_id=post.id, button_text=button_text)
+
+@app.route('/like/<id>')
+def like(id):
+    if current_user.is_authenticated:
+        session = db_session.create_session()
+        post = session.query(Post).filter(Post.id == id).first()
+        user = session.query(User).filter(User.id == current_user.id).first()
+        if post not in user.liked_posts:
+            user.liked_posts.append(post)
+            post.likes += 1
+        else:
+            user.liked_posts.remove(post)
+            post.likes -= 1
+        session.commit()
+    return redirect(f'/post/{id}')
 
 @app.route('/profile')
 def profile():

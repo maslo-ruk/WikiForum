@@ -17,7 +17,10 @@ def add_post(title, content, tags, user):
     for i in tags:
         a = sess.query(Tag).filter(Tag.id == i).first()
         post.tags.append(a)
-    post.short = post.content[:SHORT_POST_LENGTH]
+    if len(post.content) <= SHORT_POST_LENGTH:
+        post.short = post.content
+    else:
+        post.short = post.content[:SHORT_POST_LENGTH] + '...'
     post.user = sess.query(User).filter(User.id == user).first()
     post.href = f'/post/{len(sess.query(Post).all())+1}'
     sess.add(post)

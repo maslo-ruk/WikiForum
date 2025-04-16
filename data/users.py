@@ -5,13 +5,22 @@ from .db_session import SqlAlchemyBase
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 
-association_table = sqlalchemy.Table(
+association_table_1 = sqlalchemy.Table(
     'readers_to_posts',
     SqlAlchemyBase.metadata,
     sqlalchemy.Column('posts', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('posts.id')),
     sqlalchemy.Column('users', sqlalchemy.Integer,
                       sqlalchemy.ForeignKey('users.id')))
+
+association_table_2 = sqlalchemy.Table(
+    'likers_and_posts',
+    SqlAlchemyBase.metadata,
+    sqlalchemy.Column('posts', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('posts.id')),
+    sqlalchemy.Column('users', sqlalchemy.Integer,
+                      sqlalchemy.ForeignKey('users.id')))
+
 
 class User(SqlAlchemyBase, UserMixin):
     __tablename__ = 'users'
@@ -27,6 +36,7 @@ class User(SqlAlchemyBase, UserMixin):
     posts = orm.relationship("Post", back_populates='user')
     comments = orm.relationship("Comment", back_populates='user')
     read_posts = orm.relationship('Post', secondary='readers_to_posts', backref='users')
+    liked_posts = orm.relationship('Post', secondary='likers_and_posts', backref='likers')
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

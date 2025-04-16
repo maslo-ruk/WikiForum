@@ -25,12 +25,9 @@ def make_db():
 
 def main():
     db_session.global_init('db/wikiforum.db')
-    session = db_session.create_session()
-    post = session.query(Post).all()
-    session.commit()
-    session.close()
-    print(post[1].id)
-
+    sess = db_session.create_session()
+    posts = sess.query(Post).first()
+    print(posts.likers)
 main()
 
 # new rocket model, tags: 1

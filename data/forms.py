@@ -32,3 +32,5 @@ class SearchPostForm(FlaskForm):
 class AddCommentForm(FlaskForm):
     content = TextAreaField('Оставить комментарий')
     submit = SubmitField('Готово')
+
+# class LikeForm(FlaskForm):
