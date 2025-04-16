@@ -95,6 +95,7 @@ div.headerleft-button {
     align-items: center;
 }
 
+
 .header-left div {
     background-color: black;
 }
@@ -123,3 +124,49 @@ form.header-form {
     align-items: center;
 }
 
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8ff;
+    margin: 20;
+    padding: 10;
+}
+
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #000305;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+input[type="file"],
+button {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    background: #5cb85c;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button {
+    background: #000305;
+}

@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField, SearchField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, InputRequired
 
 class LoginForm(FlaskForm):
     email = StringField('Электронная почта', validators=[DataRequired()])
@@ -12,7 +12,8 @@ class LoginForm(FlaskForm):
 
 class AddPostForm(FlaskForm):
     label = StringField('Название статьи')
-    content = TextAreaField('Содержание')
+    content = TextAreaField('Содержание', validators=[InputRequired()])
+    tegs = TextAreaField('Теги', validators=[InputRequired()])
     submit = SubmitField('Создать')
 
 
