@@ -17,11 +17,15 @@ def add_post(title, content, tags, user):
     for i in tags:
         a = sess.query(Tag).filter(Tag.id == i).first()
         post.tags.append(a)
-    post.short = post.content[:SHORT_POST_LENGTH]
+    if len(post.content) <= SHORT_POST_LENGTH:
+        post.short = post.content
+    else:
+        post.short = post.content[:SHORT_POST_LENGTH] + '...'
     post.user = sess.query(User).filter(User.id == user).first()
     post.href = f'/post/{len(sess.query(Post).all())+1}'
     sess.add(post)
     sess.commit()
+    sess.close()
 
 def add_user(name, email, password):
     user = User()
@@ -35,11 +39,13 @@ def add_user(name, email, password):
     user.set_password(password)
     sess.add(user)
     sess.commit()
+    sess.close()
 
 
 def find_posts_by_tag(tag_id):
     sess = db_session.create_session()
     posts = sess.query(Post).filter(Post.tags.any(id=tag_id)).all()
+    sess.close()
     return posts
 
 
@@ -50,6 +56,12 @@ def add_tag(name):
     tag.href = f'/tag/{len(sess.query(Tag).all()) + 1}'
     sess.add(tag)
     sess.commit()
+    sess.close()
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+
+def allowed_file(filename):
+    print(filename.rsplit('.', 1)[1])
+    print('.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS, 1)
+    return '.' in filename and filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS

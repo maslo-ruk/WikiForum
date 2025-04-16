@@ -13,6 +13,8 @@
 <main>
     <h2>{{post.title}}</h2>
     <p>{{post.content}}</p>
+    <a href="/like/{{post.id}}" class="like-button">{{button_text}}</a>
+    <p>Лайки: {{post.likes}}</p>
     <p>Просмотры: {{post.views}}</p>
 </main>
 {% endblock %}

@@ -12,6 +12,8 @@ class Post(SqlAlchemyBase):
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     content = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'))
+    likes = sqlalchemy.Column(sqlalchemy.Integer, default=0)
+    keywords = sqlalchemy.Column(sqlalchemy.String, default="")
     user = orm.relationship('User')
     tags = orm.relationship("Tag",
                                   secondary="posts_to_tags",
