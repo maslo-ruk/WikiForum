@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль пользователя</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+        }
+        h2 {
+            margin-top: 100px;
+        }
+        .profile-item {
+            margin-top: 40px;
+        }
+        .profile-item label {
+            font-weight: bold;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+        .my-image {
+            width: 200px;
+            height: auto;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .edit-btn {
+            background-color: #0a0a0a;
+            color: white;
+        }
+        .back-button {
+            background-color: #0a0a0a;
+            color: white;
+        }
+        a {
+           display: block;
+           margin: 10px 0;
+           text-decoration: none;
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="buttons"><button type="button" class="back-button"><---</button><h1>Профиль</h1></div>
+
+    <div class="buttons">
+
+        <img src="static/image/марс.png" class="my-image" alt="..." height="10" width="50" style="border: 3px solid black;">
+    </div>
+    <div class="profile-item">
+        <label for="nick">Никнейм:</label>
+        <p id="nick">{{name}}
+    <h2>Посты пользователя:</h2>
+    <div class="like-container">
+        {% for post in users_posts %}
+            <a href="{{ post }}" target="_blank">{{ posts }}</a>
+        {% endfor %}
+</div>
+
+</body>
+</html>
+
+{% endblock %}

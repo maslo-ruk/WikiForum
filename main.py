@@ -19,10 +19,12 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 db_session.global_init("db/wikiforum.db")
 
+
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -32,15 +34,16 @@ def index():
     if s_form.validate_on_submit():
         text = s_form.title.data
         return redirect(f'/search/{text}')
-    return render_template('index.html', search_form=s_form, posts = posts, tags=session.query(Tag).all())
+    return render_template('index.html', search_form=s_form, posts=posts, tags=session.query(Tag).all())
 
-@app.route('/search/<text>',  methods=['GET', 'POST'])
+
+@app.route('/search/<text>', methods=['GET', 'POST'])
 def search(text):
     s_form = SearchPostForm()
     if s_form.validate_on_submit():
         ttext = s_form.title.data
         return redirect(f'/search/{ttext}')
-    session= db_session.create_session()
+    session = db_session.create_session()
     posts = session.query(Post).order_by(Post.views)[::-1]
     right_posts = []
     for i in posts:
@@ -85,11 +88,13 @@ def login():
         return redirect('/')
     return render_template('login.html', form=form)
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect("/")
+
 
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_post():
@@ -99,7 +104,7 @@ def add_post():
     idd = current_user.id
     add_post(name, story, [1], 1)
     for i, file in enumerate(files):
-        if os.path.isfile(file) and file.lower().endswith('.png'): #проверка файла
+        if os.path.isfile(file) and file.lower().endswith('.png'):  # проверка файла
             filename = os.path.basename(file)
             name, tg = os.path.splitext(filename)
             if len(files) > 1:
@@ -110,6 +115,7 @@ def add_post():
         else:
             print(f"Такого файла нет")
     return render_template('add_post-2.html', post=post)
+
 
 @app.route('/post/<id>')
 def post(id):
@@ -124,6 +130,7 @@ def post(id):
     session.commit()
     return render_template('post.html', post=post)
 
+
 @app.route('/account')
 def account():
     user_id = current_user.id
@@ -135,9 +142,10 @@ def account():
     # emaill = str(email)
     # email = "почта@ладлыф"
 
-    #Егор, смерджи только liked_post и форму профиля
-    liked_post =
-    return render_template('profile.html', title='Ваш профиль', name="...", email=email, liked_posts=["пост1", "пост2"])
+    # Егор, смерджи только liked_post и форму профиля
+    liked_post = ''
+    return render_template('profile.html', title='Ваш профиль', name="яяяяя", email=email, liked_posts=["пост1", "пост2"])
+
 
 @app.route('/tag/<id>')
 def tag(id):
@@ -149,6 +157,7 @@ def tag(id):
 def main():
     db_session.global_init('db/wikiforum.db')
     app.run(port=8080, host='127.0.0.1')
+
 
 if __name__ == '__main__':
     main()
