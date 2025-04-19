@@ -187,6 +187,9 @@ def postt(id):
     button_text = 'Нравится'
     photo_paths = post.photos_paths.split(' ')
     photo_paths.remove('')
+    comment_form = AddCommentForm()
+    if comment_form.validate_on_submit():
+        comment = comment_form.content.data
     if current_user.is_authenticated:
         cu = session.query(User).filter(User.id == current_user.id).first()
         read = cu.read_posts
@@ -201,7 +204,7 @@ def postt(id):
     session.commit()
     session.close()
     return render_template('post.html', post=post_, p_id=post_['id'], button_text=button_text,
-                           paths=photo_paths, tags=session.query(Tag).all())
+                           paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form)
 
 @app.route('/like/<id>')
 def like(id):

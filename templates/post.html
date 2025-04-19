@@ -20,5 +20,15 @@
     <a href="/like/{{post.id}}" class="like-button">{{button_text}}</a>
     <p>Лайки: {{post.likes}}</p>
     <p>Просмотры: {{post.views}}</p>
+    <form action="" method="post">
+        {{comment_form.hidden_tag()}}
+        <p>Комментарии к посту:</p>
+        {{comment_form.content}}
+        <div>
+            <p>
+                {{comment_form.submit(type='submit')}}
+            </p>
+        </div>
+    </form>
 </main>
 {% endblock %}
