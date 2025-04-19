@@ -27,7 +27,8 @@ class Post(SqlAlchemyBase):
     comments = orm.relationship("Comment", back_populates='post')
 
     def to_dict(self):
-        return {'title': self.title, 'content': self.content, 'user_id':self.user_id, 'views': self.views}
+        return {'id': self.id,'title': self.title, 'content': self.content, 'user_id':self.user_id, 'views': self.views,
+                'likes': self.likes}
 
     def set_values(self, title, content, tags, user):
         from data.users import User

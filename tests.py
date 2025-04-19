@@ -26,8 +26,7 @@ def make_db():
         print(i.href)
 
 def main():
-    response = requests.get('http://127.0.0.1:8080/posts')
-    print(response.json())
+    db_session.global_init('db/wikiforum.db')
 
 main()
 

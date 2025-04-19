@@ -138,12 +138,19 @@ def logout():
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_postt():
     if current_user.is_authenticated:
+        session = db_session.create_session()
+        all_tags_ = session.query(Tag).all()
+        all_tags = []
+        for i in all_tags_:
+            all_tags.append(i.to_dict())
+        print(all_tags)
         if request.method == 'POST':
             name = request.form['title']
             story = request.form["story"]
+            tags = request.form.getlist("tags")
             files = request.files.getlist("files")
             idd = current_user.id
-            add_post(name, story, [1], idd)
+            add_post(name, story, list(map(int, tags)), idd)
             session = db_session.create_session()
             post = session.query(Post).all()[-1]
             post_id = post.id
@@ -161,7 +168,9 @@ def add_postt():
                     pass
             session.commit()
             session.close()
-        return render_template('add_post-2.html')
+        session.commit()
+        session.close()
+        return render_template('add_post-2.html', tags=all_tags)
     else:
         return redirect('/not_authenticated')
 
@@ -188,8 +197,10 @@ def postt(id):
             button_text = 'Нравится'
         else:
             button_text = 'Убрать из понравившегося'
+    post_ = post.to_dict()
+    session.commit()
     session.close()
-    return render_template('post.html', post=post, p_id=post.id, button_text=button_text,
+    return render_template('post.html', post=post_, p_id=post_['id'], button_text=button_text,
                            paths=photo_paths, tags=session.query(Tag).all())
 
 @app.route('/like/<id>')
@@ -216,7 +227,8 @@ def account():
     photo = user.photo_path
     email = user.email
     db_sess.close()
-    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email, photo=photo)
+    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email,
+                           photo=photo)
 
 @app.route('/tag/<id>')
 def tag(id):
