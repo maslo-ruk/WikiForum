@@ -85,7 +85,6 @@ def post(id):
             add_comment(comment, current_user.id, current_user.name, post.id, post.content)
         else:
             comment_form.content.data = 'Пожалуйста, зарегистрируйся!'
-
     if current_user.is_authenticated:
         cu = session.query(User).filter(User.id == current_user.id).first()
         read = cu.read_posts
