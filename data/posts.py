@@ -20,6 +20,7 @@ class Post(SqlAlchemyBase):
     tags = orm.relationship("Tag",
                                   secondary="posts_to_tags",
                                   backref="posts")
+    photos_paths = sqlalchemy.Column(sqlalchemy.String, default='')
     short = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     views = sqlalchemy.Column(sqlalchemy.Integer, default=0)
     href = sqlalchemy.Column(sqlalchemy.String, nullable=True)

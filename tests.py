@@ -1,3 +1,5 @@
+import requests
+
 from data import db_session
 from data.functions import add_user, add_tag, add_post
 from data.posts import Post
@@ -24,8 +26,8 @@ def make_db():
         print(i.href)
 
 def main():
-    db_session.global_init('db/wikiforum.db')
-    print(add_post(f'test_post_{7}, tags: {" ".join(['1']) }', f'testposttext_{7}', [1], 1).title)
+    response = requests.get('http://127.0.0.1:8080/posts')
+    print(response.json())
 
 main()
 

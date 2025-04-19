@@ -30,14 +30,22 @@ def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
+
+@app.route('/testtt', methods =['POST'])
+def testtt():
+    print(request.json)
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     s_form = SearchPostForm()
     session = db_session.create_session()
     posts = session.query(Post).order_by(Post.views)[::-1]
-    if s_form.validate_on_submit():
-        text = s_form.title.data
-        return redirect(f'/search/{text}')
+    if request.method == 'POST':
+        if s_form.validate_on_submit():
+            text = s_form.title.data
+            return redirect(f'/search/{text}')
+        print(request.json)
     session.close()
     return render_template('index.html', search_form=s_form, posts = posts, tags=session.query(Tag).all())
 
@@ -135,17 +143,18 @@ def add_postt():
             story = request.form["story"]
             files = request.files.getlist("files")
             idd = current_user.id
-            post = Post()
-            post.set_values(name, story, [1], idd)
+            add_post(name, story, [1], idd)
             session = db_session.create_session()
-            session.add(post)
+            post = session.query(Post).all()[-1]
+            post_id = post.id
             count = 0
             for file in files:
                 count += 1
                 try:
                     if file and allowed_file(file.filename):
-                        photo = f'{post.id}_{count}.{file.filename.rsplit(".", 1)[1]}'
+                        photo = f'{post_id}_{count}.{file.filename.rsplit(".", 1)[1]}'
                         file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/post_pictures', photo))
+                        post.photos_paths += f'{os.path.join(app.config["UPLOAD_FOLDER"])}/post_pictures/{post_id}_{count}.{file.filename.rsplit(".", 1)[1]} '
                     else:
                         photo = STANDART_PHOTO
                 except Exception:
@@ -163,10 +172,12 @@ def not_authenticated():
 
 
 @app.route('/post/<id>')
-def post(id):
+def postt(id):
     session = db_session.create_session()
     post = session.query(Post).filter(Post.id == id).first()
     button_text = 'Нравится'
+    photo_paths = post.photos_paths.split(' ')
+    photo_paths.remove('')
     if current_user.is_authenticated:
         cu = session.query(User).filter(User.id == current_user.id).first()
         read = cu.read_posts
@@ -178,7 +189,8 @@ def post(id):
         else:
             button_text = 'Убрать из понравившегося'
     session.close()
-    return render_template('post.html', post=post, p_id=post.id, button_text=button_text)
+    return render_template('post.html', post=post, p_id=post.id, button_text=button_text,
+                           paths=photo_paths, tags=session.query(Tag).all())
 
 @app.route('/like/<id>')
 def like(id):
