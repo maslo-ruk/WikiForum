@@ -82,7 +82,7 @@ def post(id):
     if comment_form.validate_on_submit():
         if current_user.is_authenticated:
             comment = comment_form.content.data
-            add_comment(comment, current_user.id, current_user.name, post.id, post.content)
+            add_comment(comment, current_user, post)
         else:
             comment_form.content.data = 'Пожалуйста, зарегистрируйся!'
     if current_user.is_authenticated:
