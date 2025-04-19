@@ -17,12 +17,17 @@
     <form action="" method="post">
         {{comment_form.hidden_tag()}}
         <p>Комментарии к посту:</p>
-        {{comment_form.content}}
         <div>
-            <p>
-                {{comment_form.submit(type='submit')}}
-            </p>
+            {{ comment_form.content }}
+            <p>{{comment_form.submit(type='submit')}}</p>
         </div>
+        {% for comment in post.comments %}
+        <div>
+        <p> {{ comment.user.name }} </p>
+        <p> {{ comment.content }}</p>
+        </div>
+        {% endfor %}
+
     </form>
 </main>
 {% endblock %}
