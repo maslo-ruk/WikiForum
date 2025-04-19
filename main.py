@@ -6,6 +6,7 @@ from data.posts_api import PostResourse, PostListResource
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.forms import *
 from flask_restful import reqparse, abort, Api, Resource
+from data.comment import Comment
 
 
 from werkzeug.utils import secure_filename
@@ -180,7 +181,7 @@ def not_authenticated():
     return render_template('not_authenticated.html')
 
 
-@app.route('/post/<id>')
+@app.route('/post/<id>', methods=['GET', 'POST'])
 def postt(id):
     session = db_session.create_session()
     post = session.query(Post).filter(Post.id == id).first()
@@ -189,7 +190,18 @@ def postt(id):
     photo_paths.remove('')
     comment_form = AddCommentForm()
     if comment_form.validate_on_submit():
-        comment = comment_form.content.data
+        if current_user.is_authenticated:
+            content = comment_form.content.data
+            comment = Comment()
+            if not comment:
+                return False
+            comment.content = content
+            comment.user = session.query(User).filter(User.id == current_user.id).first()
+            comment.post = post
+            session.add(comment)
+
+        else:
+            comment_form.content.data = "Пожалуйста, зарегистрируйся!"
     if current_user.is_authenticated:
         cu = session.query(User).filter(User.id == current_user.id).first()
         read = cu.read_posts
@@ -201,10 +213,13 @@ def postt(id):
         else:
             button_text = 'Убрать из понравившегося'
     post_ = post.to_dict()
+
     session.commit()
     session.close()
+    post_test = session.query(Post).filter(Post.id == id).first()
+    print(post_test.comments)
     return render_template('post.html', post=post_, p_id=post_['id'], button_text=button_text,
-                           paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form)
+                           paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form, post_test=post_test)
 
 @app.route('/like/<id>')
 def like(id):

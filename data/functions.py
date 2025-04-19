@@ -28,20 +28,6 @@ def add_post(title, content, tags, user):
     return post
 
 
-def add_comment(content, user, post):
-    from data.comment import Comment
-    comment = Comment()
-    sess = db_session.create_session()
-    if not content:
-        return False
-    comment.content = content
-    comment.user = user
-    comment.post = post
-    sess.add(comment)
-    sess.commit()
-    sess.close()
-
-
 def add_user(name, email, password):
     user = User()
     sess = db_session.create_session()

@@ -27,6 +27,7 @@ def make_db():
 
 def main():
     db_session.global_init('db/wikiforum.db')
+    make_db()
 
 main()
 
