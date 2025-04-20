@@ -23,10 +23,10 @@
         {% if current_user.is_authenticated %}
             <div class="headerleft-button"><a href="/profile">Личный кабинет</a></div>
             <div class="headerleft-button"><a href="/logout">Выйти</a></div>
+            <div class="headerleft-button"><a href="/add_post">+ Создать статью</a></div>
         {%else%}
             <div class="headerleft-button"><a href="/login">Войти</a></div>
-             <div class="headerleft-button"> <a href="/register">Зарегистрироваться</a></div>
-
+            <div class="headerleft-button"> <a href="/register">Зарегистрироваться</a></div>
         {%endif%}
         </div>
         <div class="header-left">

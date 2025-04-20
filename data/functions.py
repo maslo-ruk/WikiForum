@@ -30,6 +30,7 @@ def add_post(title, content, tags, user):
 def add_user(name, email, password):
     user = User()
     sess = db_session.create_session()
+    id = len(sess.query(User).all()) + 1
     if sess.query(User).filter(User.name == name).first() or sess.query(User).filter(User.email == email).first():
         return False
     if not check_password_safe(password):
@@ -37,7 +38,7 @@ def add_user(name, email, password):
     user.name = name
     user.email = email
     user.set_password(password)
-    user.href = f'author/{user.id}'
+    user.href = f'author/{id}'
     sess.add(user)
     sess.commit()
     sess.close()

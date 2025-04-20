@@ -57,7 +57,7 @@
             background-color: #0a0a0a;
             color: white;
         }
-        a {
+        a.lenin {
            display: block;
            margin: 10px 0;
            text-decoration: none;
@@ -74,12 +74,14 @@
     </div>
     <div class="profile-item">
         <label for="nick">Никнейм:</label>
-        <p id="nick">{{name}}
+        <p id="nick">{{name}}</p>
+    </div>
     <h2>Посты пользователя:</h2>
     <div class="like-container">
-        {% for post in users_posts %}
-            <a href="{{ post }}" target="_blank">{{ posts }}</a>
+        {% for post in user_posts %}
+            <a class="lenin" href="/{{ post.href }}" target="_blank">{{ post.title }}</a>
         {% endfor %}
+    </div>
 </div>
 
 </body>

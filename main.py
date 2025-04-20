@@ -177,6 +177,7 @@ def not_authenticated():
 def postt(id):
     session = db_session.create_session()
     post = session.query(Post).filter(Post.id == id).first()
+    author = post.user.to_dict()
     button_text = 'Нравится'
     photo_paths = post.photos_paths.split(' ')
     photo_paths.remove('')
@@ -197,7 +198,8 @@ def postt(id):
     session.commit()
     session.close()
     return render_template('post.html', post=post_, p_id=post_['id'], button_text=button_text,
-                           paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form)
+                           paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form,
+                           author_name=author['name'], author_href=author['href'])
 
 @app.route('/like/<id>')
 def like(id):
@@ -229,6 +231,16 @@ def account():
     db_sess.close()
     return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email,
                            photo=photo)
+
+@app.route('/author/<int:id>')
+def author(id):
+    session = db_session.create_session()
+    user = session.query(User).get(id)
+    name = user.name
+    user_posts = user.posts
+    session.close()
+    print(user_posts)
+    return render_template('users_profile.html', name=name, user_posts=user_posts)
 
 @app.route('/tag/<id>')
 def tag(id):

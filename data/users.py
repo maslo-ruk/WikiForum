@@ -32,6 +32,7 @@ class User(SqlAlchemyBase, UserMixin):
     created_date = sqlalchemy.Column(sqlalchemy.DateTime,
                                      default=datetime.datetime.now)
     photo_path = sqlalchemy.Column(sqlalchemy.String, default='static/image/profile_pictures/0.jpg')
+    href = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     posts = orm.relationship("Post", back_populates='user')
     comments = orm.relationship("Comment", back_populates='user')
@@ -47,4 +48,7 @@ class User(SqlAlchemyBase, UserMixin):
 
     def __str__(self):
         return f'{self.name}'
+
+    def to_dict(self):
+        return {'id': self.id, 'name':self.name, 'href':self.href, }
 
