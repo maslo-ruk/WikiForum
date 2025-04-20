@@ -19,3 +19,6 @@ class Tag(SqlAlchemyBase):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     href = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
+    def to_dict(self):
+        return {'id':self.id, 'name':self.name, 'href':self.href}

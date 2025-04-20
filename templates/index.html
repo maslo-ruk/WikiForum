@@ -8,6 +8,11 @@
       <li class="liv"><a href={{tag.href}}>{{tag.name}}</a></li>
       {%endfor%}
     </ul>
+    <p class="tik">Хз, не тыкай</p>
+      <select name="sort_by" id="sort_by">
+        <option class="optionn" value="popularity">Популярность</option>
+        <option class="optionn" value="likes">Лайки</option>
+      </select>
   </nav>
 </aside>
 <main>
@@ -18,4 +23,7 @@
   </div>
   {%endfor%}
 </main>
+
+<script src="../static/javascript/index.js"></script>
+
 {% endblock %}

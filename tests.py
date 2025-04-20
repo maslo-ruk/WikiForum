@@ -1,3 +1,5 @@
+import requests
+
 from data import db_session
 from data.functions import add_user, add_tag, add_post
 from data.posts import Post
