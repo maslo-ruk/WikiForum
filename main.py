@@ -180,7 +180,7 @@ def not_authenticated():
     return render_template('not_authenticated.html')
 
 
-@app.route('/post/<id>')
+@app.route('/post/<id>', methods=['GET', 'POST'])
 def postt(id):
     session = db_session.create_session()
     post = session.query(Post).filter(Post.id == id).first()

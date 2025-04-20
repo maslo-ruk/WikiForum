@@ -37,6 +37,7 @@ def add_user(name, email, password):
     user.name = name
     user.email = email
     user.set_password(password)
+    user.href = f'author/{user.id}'
     sess.add(user)
     sess.commit()
     sess.close()

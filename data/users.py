@@ -38,6 +38,7 @@ class User(SqlAlchemyBase, UserMixin):
     read_posts = orm.relationship('Post', secondary='readers_to_posts', backref='users')
     liked_posts = orm.relationship('Post', secondary='likers_and_posts', backref='likers')
 
+
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
 
