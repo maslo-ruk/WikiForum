@@ -27,12 +27,12 @@
             {{ comment_form.content }}
             <p>{{comment_form.submit(type='submit')}}</p>
         </div>
-        {% for comment in post_test.comments %}
-            <p> ----------------- </p>
-            <p> {{ comment.user.name }} </p>
-            <p> {{ comment.content }}</p>
-            <p> ----------------- </p>
-        {% endfor %}
+        <ul>
+            {% for comment in post_test.comments %}
+                <li> {{ comment.user.name + ":" }}
+                {{ comment.content }} </li>
+            {% endfor %}
+        </ul>
 
     </form>
 </main>

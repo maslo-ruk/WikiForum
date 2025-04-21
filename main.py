@@ -199,6 +199,7 @@ def postt(id):
             comment.user = session.query(User).filter(User.id == current_user.id).first()
             comment.post = post
             session.add(comment)
+            comment_form.content.data = ""
 
         else:
             comment_form.content.data = "Пожалуйста, зарегистрируйся!"
