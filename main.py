@@ -75,6 +75,17 @@ def search(text):
 #         return content
 #     return render_template('add_post.html', form=form)
 
+@app.route("/edit_profile", methods=["get", "post"])
+def edit_profile():
+    form = EditForm()
+    session = db_session.create_session()
+    cu = session.query(User).filter(User.id == current_user.id).first()
+    if form.validate_on_submit():
+        cu.name = form.name.data
+        cu.email = form.email.data
+    session.commit()
+    session.close()
+    return render_template('edit.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

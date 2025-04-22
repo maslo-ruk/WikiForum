@@ -30,6 +30,12 @@ class SearchPostForm(FlaskForm):
     submit = SubmitField('Искать')
 
 
+class EditForm(FlaskForm):
+    name = StringField('Ваш логин', validators=[DataRequired()])
+    email = StringField('Электронная почта', validators=[DataRequired()])
+    submit = SubmitField('Изменить')
+
+
 class AddCommentForm(FlaskForm):
     content = TextAreaField('Оставить комментарий')
     submit = SubmitField('Готово')

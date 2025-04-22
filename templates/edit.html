@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <main>
+    <form action="" method="post" class="edit-form">
+        <h3> Редактирование профиля </h3>
+        {{ form.hidden_tag() }}
+        <p> {{ form.name.label }}<br>
+            {{ form.name() }} </p>
+        <p>
+            {{ form.email.label }}<br>
+            {{ form.email() }}
+<!--            {%for i in form.email.errors%}-->
+<!--                <p class="alert alert-danger" role="alert"> {{ error }} </p>-->
+<!--            {%endfor%}-->
+        <div>
+            <p>
+                {{form.submit(type='submit')}}
+            </p>
+        </div>
+        </p>
+    </form>
+    </main>
+{% endblock %}
