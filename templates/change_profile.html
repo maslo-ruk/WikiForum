@@ -64,37 +64,34 @@
     </style>
 </head>
 <body>
-
+<form action="" method="post" enctype="multipart/form-data">
 <div class="container">
-    <div class="buttons"><button type="button" class="back-button" onclick="func()"><---</button><h1>Профиль пользователя</h1></div>
+    {{ form.hidden_tag() }}
+    <div class="buttons"><button type="button" class="back-button"><---</button><h1>Профиль пользователя</h1></div>
 
     <div class="buttons">
-        <h2>{{name}}</h2>
+        <div>
+            <h2>{{name}}</h2>
+            {{form.name.label}}{{form.name()}}
+        </div>
         <img src={{photo}} class="my-image" alt="..." height="10" width="20" style="border: 3px solid black;">
+
     </div>
 
 
     <div class="profile-item">
         <label for="email">Электронная почта:</label>
-        <p id="email">{{email}}
-    </div>
-
-    <div class="buttons">
-        <button type="button" class="edit-btn">Редактировать</button>
+        <p id="email">{{email}}</p>
+        {{form.email.label}}{{form.email()}}
     </div>
     <h1>Понравившиеся посты:</h1>
     <div class="like-container">
         {% for post in liked_posts %}
-              <div class="visible-post">
-                <a href={{post.href}}>{{post.title}}</a>
-                <p>{{post.short}}</p>
-              </div>
+            <a class="lenin" href="{{ post }}" target="_blank">{{ post }}</a>
         {% endfor %}
-    </div>
+    </div>    
 </div>
-<script>
-    functio
-</script>
+</form>
 </body>
 </html>
 

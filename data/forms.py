@@ -18,10 +18,10 @@ class AddPostForm(FlaskForm):
 
 
 class RegisterForm(FlaskForm):
-    name = StringField('Ваш логин', validators=[DataRequired()])
-    email = StringField('Электронная почта', validators=[DataRequired()])
-    password = StringField('Ваш пароль', validators=[DataRequired()])
-    second_password = StringField('Ваш пароль', validators=[DataRequired()])
+    name = StringField('Ваш логин:', validators=[DataRequired()])
+    email = StringField('Электронная почта:', validators=[DataRequired()])
+    password = StringField('Ваш пароль:', validators=[DataRequired()])
+    second_password = StringField('Повторите пароль:', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Создать')
 
@@ -34,4 +34,9 @@ class AddCommentForm(FlaskForm):
     content = TextAreaField('Оставить комментарий')
     submit = SubmitField('Готово')
 
-# class LikeForm(FlaskForm):
+class changeProfileForm(FlaskForm):
+    name = StringField('Изменить логин:', validators=[DataRequired()])
+    email = StringField('Изменить почту:', validators=[DataRequired()])
+    password = StringField('Изменить пароль', validators=[DataRequired()])
+    submit = SubmitField('Готово')
+

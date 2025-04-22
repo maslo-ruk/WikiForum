@@ -247,7 +247,6 @@ def like(id):
     return redirect(f'/post/{id}')
 
 @app.route('/profile')
-
 @app.route('/account')
 def account():
     user_id = current_user.id
@@ -258,9 +257,30 @@ def account():
     email = user.email
     # Егор, смерджи только liked_post и форму профиля
     liked_post = ''
+    liked_posts = user.liked_posts
+    print(liked_posts)
     db_sess.close()
     return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email,
-                           photo=photo)
+                           photo=photo, liked_posts=liked_posts)
+
+
+@app.route('/profile_change')
+def change_profile():
+    form = changeProfileForm()
+    user_id = current_user.id
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == user_id).first()
+    nick_name = user.name
+    photo = user.photo_path
+    email = user.email
+    # Егор, смерджи только liked_post и форму профиля
+    liked_posts = user.liked_posts
+    print(liked_posts)
+    db_sess.close()
+    return render_template('change_profile.html', title='Ваш профиль', name=nick_name, email=email,
+                           photo=photo, form=form, liked_posts=liked_posts)
+
+
 
 @app.route('/author/<int:id>')
 def author(id):
