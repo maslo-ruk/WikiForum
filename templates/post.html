@@ -15,12 +15,16 @@
     <form action="" method="post">
         {{comment_form.hidden_tag()}}
         <p>Комментарии к посту:</p>
-        {{comment_form.content}}
         <div>
-            <p>
-                {{comment_form.submit(type='submit')}}
-            </p>
+            {{ comment_form.content }}
+            <p>{{comment_form.submit(type='submit')}}</p>
         </div>
+        <ul>
+            {% for comment in post_test.comments %}
+                <li> {{ comment.user.name + ":" }}
+                {{ comment.content }} </li>
+            {% endfor %}
+        </ul>
     </form>
 </main>
 {% endblock %}

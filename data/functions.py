@@ -27,6 +27,7 @@ def add_post(title, content, tags, user):
     sess.commit()
     return post
 
+
 def add_user(name, email, password):
     user = User()
     sess = db_session.create_session()
