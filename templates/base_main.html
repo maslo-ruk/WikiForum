@@ -23,7 +23,7 @@
         {% if current_user.is_authenticated %}
             <div class="headerleft-button"><a href="/profile">Личный кабинет</a></div>
             <div class="headerleft-button"><a href="/logout">Выйти</a></div>
-            <div class="headerleft-button"><a href="/add_post">+ Создать статью</a></div>
+            <div class="headerleft-button"><a href="/add_post">+Создать статью</a></div>
         {%else%}
             <div class="headerleft-button"><a href="/login">Войти</a></div>
             <div class="headerleft-button"> <a href="/register">Зарегистрироваться</a></div>
@@ -43,6 +43,20 @@
     </nav>
     <h4>{{theme}}</h4>
 </header>
+<aside class="sidenav"> <!-- Боковая панель (сайдбар) -->
+  <nav> <!-- Дополнительное меню страницы -->
+    <ul>
+      {%for tag in tags%}
+      <li class="liv"><a href={{tag.href}}>{{tag.name}}</a></li>
+      {%endfor%}
+    </ul>
+    <p class="tik">{{x}}</p>
+      <select name="sort_by" id="sort_by">
+        <option class="optionn" value="popularity">Популярность</option>
+        <option class="optionn" value="likes">Лайки</option>
+      </select>
+  </nav>
+</aside>
 {% block content %}{% endblock %}
 </body>
 </html>

@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<aside class="sidenav"> <!-- Боковая панель (сайдбар) -->
-  <nav> <!-- Дополнительное меню страницы -->
-    <ul>
-      {%for tag in tags%}
-      <li class="liv"><a href={{tag.href}}>{{tag.name}}</a></li>
-      {%endfor%}
-    </ul>
-  </nav>
-</aside>
 <main>
     <h2>{{post.title}}</h2>
     <p>{{post.content}}</p>

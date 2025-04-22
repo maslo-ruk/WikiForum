@@ -26,7 +26,11 @@ def make_db():
         print(i.href)
 
 def main():
-    make_db()
+    db_session.global_init('db/wikiforum.db')
+    sess = db_session.create_session()
+    posts = sess.query(Post).all()
+    for i in posts:
+        print(i.keywords.)
 
 main()
 

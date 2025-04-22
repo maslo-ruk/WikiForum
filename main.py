@@ -1,6 +1,6 @@
 import shutil
 
-from flask import Flask, request, render_template, redirect, jsonify
+from flask import Flask, request, render_template, redirect, jsonify, make_response
 from data.functions import *
 from data.posts_api import PostResourse, PostListResource
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -32,9 +32,23 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/testtt', methods =['POST'])
+@app.route('/testt', methods =['GET','POST'])
 def testtt():
-    print(request.json)
+    if request.method == 'POST':
+        sort_by = request.cookies.get("sort_by", 0)
+        print(request.data)
+        if sort_by:
+            print('abaaba')
+            res = make_response(
+                {'success': True})
+            res.set_cookie("sort_by", request.json['sort_by'],
+                           max_age=60 * 60 * 24 * 365 * 2)
+        else:
+            res = make_response(
+                {'success': True})
+            res.set_cookie("sort_by", request.json['sort_by'],
+                           max_age=60 * 60 * 24 * 365 * 2)
+    return res
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -42,13 +56,21 @@ def index():
     s_form = SearchPostForm()
     session = db_session.create_session()
     posts = session.query(Post).order_by(Post.views)[::-1]
+    x = request.cookies.get('sort_by')
     if request.method == 'POST':
         if s_form.validate_on_submit():
             text = s_form.title.data
             return redirect(f'/search/{text}')
     session.close()
-    return render_template('index.html', search_form=s_form, posts = posts, tags=session.query(Tag).all())
-
+    if not x:
+        res = make_response(render_template('index.html', search_form=s_form, posts=posts,
+                                            tags=session.query(Tag).all(), x='popularity'))
+        res.set_cookie("sort_by", 'popularity',
+                       max_age=60 * 60 * 24 * 365 * 2)
+    else:
+        res = make_response(render_template('index.html', search_form=s_form, posts=posts,
+                                            tags=session.query(Tag).all(), x=request.cookies.get('sort_by')))
+    return res
 
 @app.route('/search/<text>', methods=['GET', 'POST'])
 def search(text):
@@ -59,9 +81,15 @@ def search(text):
     session = db_session.create_session()
     posts = session.query(Post).order_by(Post.views)[::-1]
     right_posts = []
+    other_posts = []
     for i in posts:
-        if text in i.title or text in i.content:
+        print(text)
+        print(i.keywords.split(' '))
+        print(text in i.keywords.split(' '))
+        if text in i.title or text in i.keywords.split(' '):
             right_posts.append(i)
+        elif text in i.content:
+            other_posts.append(i)
     session.close()
     return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
@@ -136,16 +164,17 @@ def add_postt():
         all_tags = []
         for i in all_tags_:
             all_tags.append(i.to_dict())
-        print(all_tags)
         if request.method == 'POST':
             name = request.form['title']
             story = request.form["story"]
+            keywords = request.form["keywords"]
             tags = request.form.getlist("tags")
             files = request.files.getlist("files")
             idd = current_user.id
             add_post(name, story, list(map(int, tags)), idd)
             session = db_session.create_session()
             post = session.query(Post).all()[-1]
+            post.keywords = keywords
             post_id = post.id
             count = 0
             for file in files:
@@ -161,6 +190,7 @@ def add_postt():
                     pass
             session.commit()
             session.close()
+            return redirect(f'/post/{post_id}')
         session.commit()
         session.close()
         return render_template('add_post-2.html', tags=all_tags)
@@ -244,10 +274,16 @@ def author(id):
 
 @app.route('/tag/<id>')
 def tag(id):
+    s_form = SearchPostForm()
     session = db_session.create_session()
     posts = find_posts_by_tag(id)
+    if request.method == 'POST':
+        if s_form.validate_on_submit():
+            text = s_form.title.data
+            return redirect(f'/search/{text}')
     session.close()
-    return render_template('tag_page.html', posts=posts)
+    return render_template('tag_page.html', posts=posts, search_form=s_form,
+                           tags=session.query(Tag).all())
 
 
 def main():
