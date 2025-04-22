@@ -83,6 +83,7 @@ def edit_profile():
     if form.validate_on_submit():
         cu.name = form.name.data
         cu.email = form.email.data
+        return redirect(f'/profile')
     session.commit()
     session.close()
     return render_template('edit.html', form=form)

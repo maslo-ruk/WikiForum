@@ -10,9 +10,9 @@
         <p>
             {{ form.email.label }}<br>
             {{ form.email() }}
-<!--            {%for i in form.email.errors%}-->
-<!--                <p class="alert alert-danger" role="alert"> {{ error }} </p>-->
-<!--            {%endfor%}-->
+            {%for i in form.email.errors%}
+                <p class="alert alert-danger" role="alert"> {{ error }} </p>
+            {%endfor%}
         <div>
             <p>
                 {{form.submit(type='submit')}}
