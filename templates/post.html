@@ -20,9 +20,8 @@
             <p>{{comment_form.submit(type='submit')}}</p>
         </div>
         <ul>
-            {% for comment in post_test.comments %}
-                <li> {{ comment.user.name + ":" }}
-                {{ comment.content }} </li>
+            {% for comment in comments %}
+                <li> <a href="/{{comment[2]}}">{{comment[1]}}</a>: {{ comment[0] }} </li>
             {% endfor %}
         </ul>
     </form>
