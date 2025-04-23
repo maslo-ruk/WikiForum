@@ -1,7 +1,7 @@
 
 from flask import (Flask, render_template, request,
                    session, url_for, redirect)
-from PIL import Image, ImageDraw, ImageFont
+
 from random import choice, randint
 from io import BytesIO
 from os import urandom
