@@ -214,21 +214,20 @@ def like(id):
         session.commit()
     return redirect(f'/post/{id}')
 
-@app.route('/profile')
+
 
 @app.route('/account')
 def account():
-    user_id = current_user.id
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.id == user_id).first()
-    nick_name = user.name
-    photo = user.photo_path
-    email = user.email
-    # Егор, смерджи только liked_post и форму профиля
-    liked_post = ''
-    db_sess.close()
-    return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email,
-                           photo=photo)
+    # user_id = current_user.id
+    # db_sess = db_session.create_session()
+    # user = db_sess.query(User).filter(User.id == user_id).first()
+    # nick_name = user.name
+    # photo = user.photo_path
+    # email = user.email
+    # # Егор, смерджи только liked_post и форму профиля
+    # liked_post = current_user.posts
+    # db_sess.close()
+    return render_template('posts.html')
 
 @app.route('/tag/<id>')
 def tag(id):

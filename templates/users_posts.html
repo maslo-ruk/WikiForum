@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
+
+
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пост с изображениями</title>
+    <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
             padding: 0;
             background-color: #f4f4f4;
         }
@@ -13,7 +21,7 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            max-width: 1000px;
+            max-width: 600px;
             margin: auto;
         }
 
@@ -49,7 +57,7 @@
 
         .submit-button {
             padding: 10px 15px;
-            background-color: black;
+            background-color: white;
             color: white;
         }
 
@@ -57,27 +65,28 @@
             background-color: #0056b3;
         }
     </style>
+</head>
+<body>
+
 <div class="post-container">
+    <h1 class="post-title">Заголовок поста</h1>
 
-    <h2>{{post.title}}</h2>
-    <p>{{post.content}}</p>
-    {%for i in paths%}
-    <img src="../{{i}}" style="width: 200px; height:150px;">
-    {%endfor%}
-    <br>
-    <button href="/like/{{post.id}}" class="submit-button">Нравиться</button>
-    <p>Лайки: {{post.likes}}</p>
-    <p>Просмотры: {{post.views}}</p>
-    <form action="" method="post">
-        {{comment_form.hidden_tag()}}
-        <p>Комментарии к посту:</p>
-        {{comment_form.content}}
-        <div>
-            <p>
-                {{comment_form.submit(type='submit')}}
-            </p>
-        </div>
-    </form>
+    <div class="post-images">
+        <img src="/static/image/марс.png" alt="Изображение 1">
+        <img src="/static/image/марс.png" alt="Изображение 2">
+        <img src="/static/image/марс.png" alt="Изображение 3">
+        <!-- нужно сделать цикл по кол-ву изображений из списка к посту -->
+    </div>
 
+    <div class="text-block">
+    <p>текст поста типо</p>
+    </div>
+
+    <button class="submit-button">Нравиться</button>
 </div>
+
+</body>
+</html>
+
+
 {% endblock %}
