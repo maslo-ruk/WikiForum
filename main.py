@@ -1,6 +1,6 @@
 import shutil
 
-import requests
+
 from flask import Flask, request, render_template, redirect, jsonify, make_response, session
 from data.functions import *
 from data.posts_api import PostResourse, PostListResource

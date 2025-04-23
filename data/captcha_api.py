@@ -4,7 +4,6 @@ from data.posts import Post
 from flask import jsonify, send_file
 from data.functions import captcha
 
-from PIL import Image, ImageDraw, ImageFont
 from random import choice, randint
 from io import BytesIO
 
