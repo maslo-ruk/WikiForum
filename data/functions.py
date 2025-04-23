@@ -110,6 +110,6 @@ def captcha(word):
     # создаем объект в буфере
     f = BytesIO()
     # сохраняем капчу в буфер
-    img.save('imgd.png', "PNG")
+    img.save('captcha_image.png', "PNG")
     # возвращаем капчу как байтовый объект
     return f.getvalue()

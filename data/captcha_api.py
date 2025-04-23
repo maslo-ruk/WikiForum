@@ -25,10 +25,10 @@ def abort_if_news_not_found(post_id):
 class CaptchaResource(Resource):
     def get(self, word):
         captcha(word)
-        return send_file('imgd.png', mimetype='image/png')
+        return send_file('materials/captcha_image.png', mimetype='image/png')
 
 
 class Captchate(Resource):
     def get(self, word):
         captcha(word)
-        return send_file('imgd.png', mimetype='image/png')
+        return send_file('captcha_image.png', mimetype='image/png')
