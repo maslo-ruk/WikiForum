@@ -124,7 +124,7 @@ form.header-form {
     align-items: center;
 }
 
-div.content {
+div.index-content {
     margin-left: 11%;
     margin-top: 11vh;
 }
@@ -141,12 +141,36 @@ body {
 }
 
 .container {
-    max-width: 900px;
-    margin: 60px auto;
-    padding: 30px;
-    background: white;
+            display: flex;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+.image-container {
+    flex: 0 0 200px;
+    margin-right: 20px;
+}
+.image-container img {
+    width: 100%;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.postcontent {
+    flex: 1;
+}
+.author {
+    font-style: italic;
+    margin-top: 10px;
+    color: #555;
+}
+.post-title {
+    font-size: 24px;
+    color: #333;
+    text-decoration: none;
+}
+.post-title:hover {
+    text-decoration: underline;
 }
 
 h1 {

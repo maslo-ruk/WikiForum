@@ -1,47 +1,15 @@
 {% extends "base_main.html" %}
 
 {% block content %}
-<style>
-        .container {
-            display: flex;
-            border: 1px solid #ccc;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 8px;
-            background: #f9f9f9;
-        }
-        .image-container {
-            flex: 0 0 200px;
-            margin-right: 20px;
-        }
-        .image-container img {
-            width: 100%;
-            border-radius: 8px;
-        }
-        .postcontent {
-            flex: 1;
-        }
-        .author {
-            font-style: italic;
-            margin-top: 10px;
-            color: #555;
-        }
-        .post-title {
-            font-size: 24px;
-            color: #333;
-            text-decoration: none;
-        }
-        .post-title:hover {
-            text-decoration: underline;
-        }
-    </style>
   {%for post in posts%}
   <div class="container">
-    <div class="image-container">
-        <img src={{post.picture}} alt="картинка хыхыхы">
-    </div>
+      {% if post.photos_paths %}
+        <div class="image-container">
+            <img src="/{{post.first_photopath}}" alt="картинка хыхыхы">
+        </div>
+      {% endif %}
     <div class="postcontent">
-        <a href="url-to-post.html" class="post-title">{{post.title}}</a>
+        <a href="{{post.href}}" class="post-title">{{post.title}}</a>
         <p>{{post.text}}</p>
         <p class="author"> Автор:</p>
     </div>

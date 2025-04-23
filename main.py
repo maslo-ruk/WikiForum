@@ -217,6 +217,8 @@ def add_postt():
                         photo = f'{post_id}_{count}.{file.filename.rsplit(".", 1)[1]}'
                         file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/post_pictures', photo))
                         post.photos_paths += f'{os.path.join(app.config["UPLOAD_FOLDER"])}/post_pictures/{post_id}_{count}.{file.filename.rsplit(".", 1)[1]} '
+                        if count == 1:
+                            post.first_photopath = f'{os.path.join(app.config["UPLOAD_FOLDER"])}/post_pictures/{post_id}_{count}.{file.filename.rsplit(".", 1)[1]}'
                     else:
                         photo = STANDART_PHOTO
                 except Exception:

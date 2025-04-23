@@ -3,9 +3,15 @@
 {% block content %}
 
   {%for post in posts%}
-  <div class="visible-post">
-    <a href={{post.href}}>{{post.title}}</a>
-    <p>{{post.short}}</p>
+  <div class="container">
+    <div class="image-container">
+        <img src={{post.picture}} alt="картинка хыхыхы">
+    </div>
+    <div class="postcontent">
+        <a href="{{post.href}}" class="post-title">{{post.title}}</a>
+        <p>{{post.text}}</p>
+        <p class="author"> Автор:</p>
+    </div>
   </div>
   {%endfor%}
 
