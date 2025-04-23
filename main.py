@@ -269,6 +269,7 @@ def postt(id):
         else:
             button_text = 'Убрать из понравившегося'
     post_ = post.to_dict()
+    print(post_['content'])
     comments = []
     for i in post.comments:
         comments.append((i.content, i.user.name, i.user.href))

@@ -1,28 +1,13 @@
 {% extends "base_main.html" %}
 
 {% block content %}
-<main>
-  <aside class="sidenav"> <!-- Боковая панель (сайдбар) -->
-  <nav> <!-- Дополнительное меню страницы -->
-    <ul>
-      {%for tag in tags%}
-      <li class="liv"><a href={{tag.href}}>{{tag.name}}</a></li>
-      {%endfor%}
-    </ul>
-    <p class="tik">{{x}}</p>
-      <select name="sort_by" id="sort_by">
-        <option class="optionn" value="popularity">Популярность</option>
-        <option class="optionn" value="likes">Лайки</option>
-      </select>
-  </nav>
-</aside>
   {%for post in posts%}
   <div class="visible-post">
     <a href={{post.href}}>{{post.title}}</a>
     <p>{{post.short}}</p>
   </div>
   {%endfor%}
-</main>
+
 
 <script src="../static/javascript/index.js"></script>
 <script>

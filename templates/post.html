@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main>
     <h2>{{post.title}}</h2>
     <p>{{post.content}}</p>
     {%for i in paths%}
@@ -25,5 +24,4 @@
             {% endfor %}
         </ul>
     </form>
-</main>
 {% endblock %}

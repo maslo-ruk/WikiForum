@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<main>
     <form action="" method="post" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
         <p>
@@ -74,5 +73,4 @@
         {{message}}
     </form>
     <script src="/static/javascript/captcha.js"></script>
-    </main>
 {% endblock %}

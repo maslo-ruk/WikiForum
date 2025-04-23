@@ -33,13 +33,7 @@ def make_db():
 
 
 def main():
-    db_session.global_init('db/wikiforum.db')
-    t = [[1]] * 10
-    c = 7
-    for i in t:
-        ix = map(str, i)
-        add_post(f'test_post_{c}, tags: {" ".join(ix)}', f'testposttext_{c}', i, 1)
-        c += 1
+    make_db()
 
 main()
 

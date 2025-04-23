@@ -1,7 +1,6 @@
 {% extends "base_main.html" %}
 
 {% block content %}
-    <main>
         {% if posts %}
           {%for post in posts%}
           <div class="visible-post">
@@ -12,5 +11,4 @@
         {%else%}
             <p>Ничего не найдено</p>
         {%endif%}
-    </main>
 {% endblock %}
