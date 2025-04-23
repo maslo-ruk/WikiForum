@@ -277,12 +277,13 @@ def postt(id):
     else:
         user = 0
     post_ = post.to_dict()
+    content = parse_post(post.content, post.id)
     comments = []
     for i in post.comments:
         comments.append((i.content, i.user.name, i.user.href))
     session.commit()
     session.close()
-    return render_template('post.html', post=post_, p_id=post_['id'], button_text=button_text,
+    return render_template('post.html', post=post_, content=content, p_id=post_['id'], button_text=button_text,
                            paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form,
                            author_name=author['name'], author_href=author['href'], comments=comments,
                            user=user, liked=liked)

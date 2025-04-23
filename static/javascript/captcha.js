@@ -14,7 +14,7 @@ function new_captcha() {
             "Content-Type": "application/json",
         }
     });
-    $("#captcha_photo").html('<img src="/captcha.png/' + generatedCode + '{}">')
+    $("#captcha_photo").html('<img src="/captcha.png/' + generatedCode + '">')
 }
 
     $(document).ready(function() {

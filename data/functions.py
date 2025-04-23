@@ -110,6 +110,30 @@ def captcha(word):
     # создаем объект в буфере
     f = BytesIO()
     # сохраняем капчу в буфер
-    img.save('captcha_image.png', "PNG")
+    img.save('materials/captcha_image.png', "PNG")
     # возвращаем капчу как байтовый объект
     return f.getvalue()
+
+def parse_post(content, post_id):
+    parsed = ''
+    tag_opened = False
+    tag = ''
+    for i in content:
+        if i == '<':
+            parsed += '<br>'
+            tag_opened = True
+            continue
+        if tag_opened:
+            if i == '-':
+               tag = '-'
+               continue
+            elif i == '>':
+                tag_opened = False
+                if tag == '-':
+                    parsed += '<br>'
+                else:
+                    parsed += f'<img src="/static/image/post_pictures/{post_id}_{tag}"<br>'
+        else:
+            parsed += i
+    return parsed
+
