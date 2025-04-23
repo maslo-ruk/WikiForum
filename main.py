@@ -86,9 +86,6 @@ def search(text):
     right_posts = []
     other_posts = []
     for i in posts:
-        print(text)
-        print(i.keywords.split(' '))
-        print(text in i.keywords.split(' '))
         if text in i.title or text in i.keywords.split(' '):
             right_posts.append(i)
         elif text in i.content:
@@ -96,6 +93,21 @@ def search(text):
     session.close()
     return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
+
+@app.route("/edit_profile", methods=["get", "post"])
+def edit_profile():
+    form = EditForm()
+    session = db_session.create_session()
+    cu = session.query(User).filter(User.id == current_user.id).first()
+    if form.validate_on_submit():
+        cu.name = form.name.data
+        cu.email = form.email.data
+        session.commit()
+        session.close()
+        return redirect(f'/profile')
+    session.commit()
+    session.close()
+    return render_template('edit.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -288,31 +300,11 @@ def account():
     nick_name = user.name
     photo = user.photo_path
     email = user.email
-    # Егор, смерджи только liked_post и форму профиля
-    liked_post = ''
     liked_posts = user.liked_posts
     print(liked_posts)
     db_sess.close()
     return render_template('profile.html', title='Ваш профиль', name=nick_name, email=email,
                            photo=photo, liked_posts=liked_posts)
-
-
-@app.route('/profile_change')
-def change_profile():
-    form = changeProfileForm()
-    user_id = current_user.id
-    db_sess = db_session.create_session()
-    user = db_sess.query(User).filter(User.id == user_id).first()
-    nick_name = user.name
-    photo = user.photo_path
-    email = user.email
-    # Егор, смерджи только liked_post и форму профиля
-    liked_posts = user.liked_posts
-    print(liked_posts)
-    db_sess.close()
-    return render_template('change_profile.html', title='Ваш профиль', name=nick_name, email=email,
-                           photo=photo, form=form, liked_posts=liked_posts)
-
 
 
 @app.route('/author/<int:id>')
