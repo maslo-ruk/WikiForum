@@ -269,7 +269,6 @@ def postt(id):
         else:
             button_text = 'Убрать из понравившегося'
     post_ = post.to_dict()
-    print(post_['content'])
     comments = []
     for i in post.comments:
         comments.append((i.content, i.user.name, i.user.href))
@@ -295,7 +294,6 @@ def like(id):
     return redirect(f'/post/{id}')
 
 @app.route('/profile')
-@app.route('/account')
 def account():
     user_id = current_user.id
     db_sess = db_session.create_session()
