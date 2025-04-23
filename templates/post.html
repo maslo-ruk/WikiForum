@@ -65,8 +65,8 @@
     <img src="../{{i}}" style="width: 200px; height:150px;">
     {%endfor%}
     <br>
-    <a href="/like/{{post.id}}" class="like-button">{{button_text}}</a>
-    <p>Лайки: {{post.likes}}</p>
+    <button onclick="like({{post.likes}}, {{user}}, {{post.id}}, {{liked}})" id="like-button" class="like-button">{{button_text}}</button>
+    <p id="like_label">Лайки: {{post.likes}}</p>
     <p>Просмотры: {{post.views}}</p>
     <p>Автор: <a href="/{{author_href}}">{{author_name}}</a></p>
     <form action="" method="post">
@@ -84,4 +84,5 @@
     </form>
 
 </div>
+<script src="/static/javascript/post.js"></script>
 {% endblock %}

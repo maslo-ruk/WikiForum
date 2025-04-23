@@ -3,16 +3,18 @@
 {% block content %}
 
   {%for post in posts%}
-  <div class="container">
-    <div class="image-container">
-        <img src={{post.picture}} alt="картинка хыхыхы">
-    </div>
+<div class="container-post">
+      {% if post.photos_paths %}
+        <div class="image-container">
+            <img src="/{{post.first_photopath}}" alt="картинка хыхыхы">
+        </div>
+      {% endif %}
     <div class="postcontent">
         <a href="{{post.href}}" class="post-title">{{post.title}}</a>
         <p>{{post.text}}</p>
         <p class="author"> Автор:</p>
     </div>
-  </div>
+</div>
   {%endfor%}
 
 {% endblock %}

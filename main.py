@@ -247,6 +247,7 @@ def postt(id):
     photo_paths = post.photos_paths.split(' ')
     photo_paths.remove('')
     comment_form = AddCommentForm()
+    liked = 0
     if comment_form.validate_on_submit():
         if current_user.is_authenticated:
             content = comment_form.content.data
@@ -261,6 +262,7 @@ def postt(id):
         else:
             comment_form.content.data = "Пожалуйста, зарегистрируйся!"
     if current_user.is_authenticated:
+        user = current_user.id
         cu = session.query(User).filter(User.id == current_user.id).first()
         read = cu.read_posts
         if post not in read:
@@ -268,8 +270,12 @@ def postt(id):
             cu.read_posts.append(post)
         if post not in cu.liked_posts:
             button_text = 'Нравится'
+            liked = 1
         else:
             button_text = 'Убрать из понравившегося'
+            liked = 0
+    else:
+        user = 0
     post_ = post.to_dict()
     comments = []
     for i in post.comments:
@@ -278,22 +284,33 @@ def postt(id):
     session.close()
     return render_template('post.html', post=post_, p_id=post_['id'], button_text=button_text,
                            paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form,
-                           author_name=author['name'], author_href=author['href'], comments=comments)
+                           author_name=author['name'], author_href=author['href'], comments=comments,
+                           user=user, liked=liked)
 
-@app.route('/like/<id>')
-def like(id):
-    if current_user.is_authenticated:
-        session = db_session.create_session()
-        post = session.query(Post).filter(Post.id == id).first()
-        user = session.query(User).filter(User.id == current_user.id).first()
-        if post not in user.liked_posts:
-            user.liked_posts.append(post)
-            post.likes += 1
+@app.route('/like', methods=['POST', 'GET'])
+def like():
+    if request.method == 'POST':
+        print(1)
+        if current_user.is_authenticated:
+            print(2)
+            res = request.json
+            print(res)
+            id = res['post']
+            db_sess = db_session.create_session()
+            post = db_sess.query(Post).filter(Post.id == id).first()
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+            if post not in user.liked_posts:
+                user.liked_posts.append(post)
+                post.likes += 1
+                db_sess.commit()
+                return {'success': True,'can_like': True, 'val':1}
+            else:
+                user.liked_posts.remove(post)
+                post.likes -= 1
+                db_sess.commit()
+                return {'success': True, 'can_like': True, 'val': -1}
         else:
-            user.liked_posts.remove(post)
-            post.likes -= 1
-        session.commit()
-    return redirect(f'/post/{id}')
+            return jsonify({'success': True,'can_like': False, 'val':1})
 
 @app.route('/profile')
 def account():
