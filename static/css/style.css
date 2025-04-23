@@ -140,7 +140,7 @@ body {
     padding: 10;
 }
 
-.container {
+.container-post {
             display: flex;
             border: 1px solid #ccc;
             padding: 20px;
@@ -148,6 +148,14 @@ body {
             border-radius: 8px;
             background: #f9f9f9;
         }
+.container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 .image-container {
     flex: 0 0 200px;
     margin-right: 20px;
