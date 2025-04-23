@@ -57,12 +57,28 @@
             background-color: #0a0a0a;
             color: white;
         }
+        a.button {
+        padding: 1px 6px;
+        border: 1px outset buttonborder;
+        border-radius: 3px;
+        color: buttontext;
+        background-color: buttonface;
+        text-decoration: none;
+        }
+        a.back-button {
+        padding: 2px 2px;
+        border: 1px outset buttonborder;
+        border-radius: 1px;
+        color: buttontext;
+        background-color: buttonface;
+        text-decoration: none;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="buttons"><button type="button" class="back-button"><---</button><h1>Профиль пользователя</h1></div>
+    <div class="buttons"><a href="http://127.0.0.1:8080/" class="back-button">←</a><h1>Профиль пользователя</h1></div>
 
     <div class="buttons">
         <h2>{{name}}</h2>
@@ -76,7 +92,8 @@
     </div>
 
     <div class="buttons">
-        <button type="button" class="edit-btn">Редактировать</button>
+        <a href="http://127.0.0.1:8080/edit_profile" class="button">Редактировать</a>
+
     </div>
 </div>
 

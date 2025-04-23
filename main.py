@@ -65,16 +65,21 @@ def search(text):
     session.close()
     return render_template('search_post.html', search_form=s_form, posts=right_posts)
 
-# @app.route('/add_post', methods=['GET', 'POST'])
-# def add_post_web():
-#     form = AddPostForm()
-#     if form.validate_on_submit():
-#         name = form.label.data
-#         content = form.content.data
-#         add_post(name, content, 1)
-#         return content
-#     return render_template('add_post.html', form=form)
 
+@app.route("/edit_profile", methods=["get", "post"])
+def edit_profile():
+    form = EditForm()
+    session = db_session.create_session()
+    cu = session.query(User).filter(User.id == current_user.id).first()
+    if form.validate_on_submit():
+        cu.name = form.name.data
+        cu.email = form.email.data
+        session.commit()
+        session.close()
+        return redirect(f'/profile')
+    session.commit()
+    session.close()
+    return render_template('edit.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
