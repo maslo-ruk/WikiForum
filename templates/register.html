@@ -48,6 +48,19 @@
                 <input type="file" id="avatar" name="files" accept="image/png, image/jpeg, image/jpg">
             </p>
         </div>
+        <div class="captcha">
+                <div>
+                    {{form.captchafield.label}}<br>
+                    {{form.captchafield()}}
+                {%for i in form.captchafield.errors%}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+                </div>
+                {%endfor%}
+                <div id="captcha_photo"><img src="/captcha.png/{{word}}"></div>
+                <button id="captcha_button">Заменить код</button>
+        </div>
         <div>
             <p>
                 {{ form.remember_me() }} {{ form.remember_me.label }}
@@ -60,5 +73,6 @@
         </div>
         {{message}}
     </form>
+    <script src="/static/javascript/captcha.js"></script>
     </main>
 {% endblock %}

@@ -1,5 +1,11 @@
 import requests
 
+from flask import (Flask, render_template, request,
+                   session, url_for, redirect)
+from PIL import Image, ImageDraw, ImageFont
+from random import choice, randint
+from io import BytesIO
+from os import urandom
 from data import db_session
 from data.functions import add_user, add_tag, add_post
 from data.posts import Post
@@ -24,6 +30,45 @@ def make_db():
         i.href = f'/tag/{c}'
         c += 1
         print(i.href)
+
+def captcha(width=200, height=100):
+    # символы для капчи выбираем с таким расчетом,
+    # что бы посетители их не спутали с похожими
+    # например букву `l` и цифру `1` легко спутать
+    # генерация кода капчи из 5 символов
+    code = ''.join([choice('QWERTYUPLKJHGFDSAZXCVBN23456789') for i in range(5)])
+
+    # создаем подложку
+    img = Image.new('RGB', (width,height), (255,255,255))
+    # получаем контекст рисования
+    draw = ImageDraw.Draw(img)
+
+    # Подключаем растровый шрифт (укажите свой)
+    # начальное положение символов кода
+    x=0
+    y=12
+    # наносим код капчи
+    for let in code:
+        if x == 0: x = 5
+        else: x = x + width/5
+        # случайное положение по высоте
+        y = randint(3,55)
+        # наносим символ
+        draw.text((x,y), let, fill=(randint(0,200), randint(0,200), randint(0,200), 128), font_size=50)
+
+    # создаем шум капчи (в данном случае черточки)
+    # можно создать шум точками (кому как нравится)
+    for i in range(40):
+        draw.line([(randint(0,width),randint(0,height)),
+                   (randint(0,width),randint(0,height))],
+                  randint(0, 200), 2, 128)
+
+    # создаем объект в буфере
+    f = BytesIO()
+    # сохраняем капчу в буфер
+    img.save('imgd.png', "PNG")
+    # возвращаем капчу как байтовый объект
+    return  f.getvalue()
 
 def main():
     make_db()

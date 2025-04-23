@@ -15,7 +15,7 @@ def abort_if_news_not_found(post_id):
     session = db_session.create_session()
     posts = session.query(Post).get(post_id)
     if not posts:
-        abort(404, message=f"News {post_id} not found")
+        abort(404, message=f"Post {post_id} not found")
 
 class PostResourse(Resource):
     def get(self, post_id):

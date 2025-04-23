@@ -1,8 +1,10 @@
 import shutil
 
-from flask import Flask, request, render_template, redirect, jsonify, make_response
+import requests
+from flask import Flask, request, render_template, redirect, jsonify, make_response, session
 from data.functions import *
 from data.posts_api import PostResourse, PostListResource
+from data.captcha_api import CaptchaResource
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from data.forms import *
 from flask_restful import reqparse, abort, Api, Resource
@@ -97,36 +99,54 @@ def search(text):
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    from random import choice
     form = RegisterForm()
-    session = db_session.create_session()
+    db_sess = db_session.create_session()
+    code = session.get('captcha_code', 0)
+    print(not code)
+    if not code:
+        session['captcha_code'] = ''.join([choice('QERTYUPLKJHGFDSAZXCVBN23456789') for i in range(5)])
+        code = session.get('captcha_code', 0)
+    print(code)
     if request.method == 'POST':
         if form.validate_on_submit():
             name = form.name.data
             email = form.email.data
             password1, password2 = form.password.data, form.second_password.data
-            if session.query(User).filter(User.email == email).first():
-                return render_template('register.html', form=form, message='Такой пользователь уже есть!')
+            captcha_ = form.captchafield.data
+            if db_sess.query(User).filter(User.email == email).first():
+                return render_template('register.html', form=form, message='Такой пользователь уже есть!', word=code)
             if password1 != password2:
-                return render_template('register.html', form=form, message='Пароли не совпадают!')
-            add_user(name, email, password1)
-            session = db_session.create_session()
-            user = session.query(User).all()[-1]
+                return render_template('register.html', form=form, message='Пароли не совпадают!', word=code)
+            print(captcha_, code)
+            if captcha_ != code:
+                return render_template('register.html', form=form, message='Капча введена неверно!', word=code)
             try:
                 file = request.files['files']
                 if file and allowed_file(file.filename):
+                    add_user(name, email, password1)
+                    db_sess = db_session.create_session()
+                    user = db_sess.query(User).all()[-1]
                     photo = f'{user.id}.{file.filename.rsplit(".", 1)[1]}'
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/profile_pictures', photo))
                     user.photo_path = f'static/image/profile_pictures/{photo}'
+                elif file:
+                    return render_template('register.html', form=form, message=f'Неверный форма изображения.\nДопустимые форматы:\n{", ".join(ALLOWED_EXTENSIONS)}',
+                                           word=code)
                 else:
+                    add_user(name, email, password1)
+                    db_sess = db_session.create_session()
+                    user = db_sess.query(User).all()[-1]
                     photo = STANDART_PHOTO
             except Exception:
                 photo = STANDART_PHOTO
             login_user(user, remember=form.remember_me.data)
-            session.commit()
-            session.close()
+            session['captcha_code'] = 0
+            db_sess.commit()
+            db_sess.close()
             return redirect('/')
-    session.close()
-    return render_template('register.html', form=form)
+    db_sess.close()
+    return render_template('register.html', form=form, word=code)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -242,7 +262,7 @@ def postt(id):
     session.close()
     return render_template('post.html', post=post_, p_id=post_['id'], button_text=button_text,
                            paths=photo_paths, tags=session.query(Tag).all(), comment_form=comment_form,
-                           author_name=author['name'], author_href=author['href'], comment_form=comment_form)
+                           author_name=author['name'], author_href=author['href'])
 
 @app.route('/like/<id>')
 def like(id):
@@ -319,10 +339,30 @@ def tag(id):
                            tags=session.query(Tag).all())
 
 
+@app.route('/ctest')
+def ctest():
+    from random import choice
+    code = session.get('captcha_code', 0)
+    print(code)
+    print(not code)
+    if code == 'no_code' or not code:
+        session['captcha_code'] = ''.join([choice('QERTYUPLKJHGFDSAZXCVBN23456789') for i in range(5)])
+    return render_template('ctest.html', word=code)
+
+
+@app.route('/change_captcha_code', methods =['GET','POST'])
+def ccode():
+    if request.method == 'POST':
+        a = request.json['code']
+        session['captcha_code'] = a
+    return {'success': True}
+
+
 def main():
     db_session.global_init('db/wikiforum.db')
     news_api.add_resource(PostResourse, '/posts/<int:post_id>')
     news_api.add_resource(PostListResource, '/posts')
+    news_api.add_resource(CaptchaResource, '/captcha.png/<word>')
     app.run(port=8080, host='127.0.0.1')
 
 

@@ -39,6 +39,10 @@
     padding-left: 0px;
 }
 
+div.captcha {
+    display:flex
+}
+
 .sidenav li{
     list-style-type: none;
 }

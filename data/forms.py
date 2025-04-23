@@ -22,6 +22,7 @@ class RegisterForm(FlaskForm):
     email = StringField('Электронная почта:', validators=[DataRequired()])
     password = StringField('Ваш пароль:', validators=[DataRequired()])
     second_password = StringField('Повторите пароль:', validators=[DataRequired()])
+    captchafield = StringField('Введите капчу:', validators=[DataRequired()])
     remember_me = BooleanField('Запомнить меня')
     submit = SubmitField('Создать')
 
