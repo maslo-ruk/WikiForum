@@ -14,8 +14,9 @@ from data.tags import Tag
 def make_db():
     db_session.global_init('db/wikiforum.db')
     add_user('default_user', 'Maslo.Paslo@gmail.com', 'reset')
-    for i in range(1,4):
-        add_tag(f'default_tag_{i}')
+    for i in range(8):
+        x = input()
+        add_tag(x)
     t = [[1], [2], [3], [3,1], [2,1], [2,3], [2]]
     c = 0
     for i in t:
@@ -33,11 +34,9 @@ def make_db():
 
 def main():
     db_session.global_init('db/wikiforum.db')
-    sess = db_session.create_session()
-    posts = sess.query(Post).all()
-    for i in posts:
-        print(i.content)
-
+    for i in range(7):
+        x = input()
+        add_tag(x)
 
 main()
 

@@ -11,9 +11,11 @@
       {% endif %}
     <div class="postcontent">
         <a href="{{post.href}}" class="post-title">{{post.title}}</a>
-        <p>{{post.text}}</p>
-        <p class="author"> Автор:</p>
+        <p>{{post.short}}</p>
     </div>
+    {% if post.user_id == user or user == 1%}
+    <a href="/delete/{{post.id}}" class="delete-button">Удалить пост</a>
+    {%endif%}
 </div>
   {%endfor%}
 

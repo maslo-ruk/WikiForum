@@ -56,6 +56,10 @@ def testtt():
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    if current_user.is_authenticated:
+        user = current_user.id
+    else:
+        user = 0
     s_form = SearchPostForm()
     session = db_session.create_session()
     posts = session.query(Post).order_by(Post.views)[::-1]
@@ -67,12 +71,12 @@ def index():
     session.close()
     if not x:
         res = make_response(render_template('index.html', search_form=s_form, posts=posts,
-                                            tags=session.query(Tag).all(), x='popularity'))
+                                            tags=session.query(Tag).all(), x='popularity', user=user))
         res.set_cookie("sort_by", 'popularity',
                        max_age=60 * 60 * 24 * 365 * 2)
     else:
         res = make_response(render_template('index.html', search_form=s_form, posts=posts,
-                                            tags=session.query(Tag).all(), x=request.cookies.get('sort_by')))
+                                            tags=session.query(Tag).all(), x=request.cookies.get('sort_by'), user=user))
     return res
 
 @app.route('/search/<text>', methods=['GET', 'POST'])
@@ -97,16 +101,22 @@ def search(text):
 @app.route("/edit_profile", methods=["get", "post"])
 def edit_profile():
     form = EditForm()
-    session = db_session.create_session()
-    cu = session.query(User).filter(User.id == current_user.id).first()
+    db_sess = db_session.create_session()
+    cu = db_sess.query(User).filter(User.id == current_user.id).first()
     if form.validate_on_submit():
-        cu.name = form.name.data
-        cu.email = form.email.data
-        session.commit()
-        session.close()
+        email = form.email.data
+        name = form.name.data
+        if not check_pochta(email):
+            return render_template('register.html', form=form, message='Неверный формат почты!')
+        if db_sess.query(User).filter(User.email == email).first():
+            return render_template('register.html', form=form, message='Такой пользователь уже есть!')
+        cu.name = name
+        cu.email = email
+        db_sess.commit()
+        db_sess.close()
         return redirect(f'/profile')
-    session.commit()
-    session.close()
+    db_sess.commit()
+    db_sess.close()
     return render_template('edit.html', form=form)
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -126,11 +136,12 @@ def register():
             email = form.email.data
             password1, password2 = form.password.data, form.second_password.data
             captcha_ = form.captchafield.data
+            if not check_pochta(email):
+                return render_template('register.html', form=form, message='Неверный формат почты!', word=code)
             if db_sess.query(User).filter(User.email == email).first():
                 return render_template('register.html', form=form, message='Такой пользователь уже есть!', word=code)
             if password1 != password2:
                 return render_template('register.html', form=form, message='Пароли не совпадают!', word=code)
-            print(captcha_, code)
             if captcha_ != code:
                 return render_template('register.html', form=form, message='Капча введена неверно!', word=code)
             try:
@@ -146,11 +157,16 @@ def register():
                     return render_template('register.html', form=form, message=f'Неверный форма изображения.\nДопустимые форматы:\n{", ".join(ALLOWED_EXTENSIONS)}',
                                            word=code)
                 else:
+                    print('a')
                     add_user(name, email, password1)
                     db_sess = db_session.create_session()
                     user = db_sess.query(User).all()[-1]
+                    print(user)
                     photo = STANDART_PHOTO
             except Exception:
+                add_user(name, email, password1)
+                db_sess = db_session.create_session()
+                user = db_sess.query(User).all()[-1]
                 photo = STANDART_PHOTO
             login_user(user, remember=form.remember_me.data)
             session['captcha_code'] = 0
@@ -248,7 +264,7 @@ def postt(id):
     photo_paths.remove('')
     comment_form = AddCommentForm()
     liked = 0
-    if comment_form.validate_on_submit():
+    if comment_form.validate_on_submit() and comment_form.content.data:
         if current_user.is_authenticated:
             content = comment_form.content.data
             comment = Comment()
@@ -349,8 +365,16 @@ def tag(id):
             return redirect(f'/search/{text}')
     session.close()
     return render_template('tag_page.html', posts=posts, search_form=s_form,
-                           tags=session.query(Tag).all())
+                           tags=session.query(Tag).all(), user=current_user.id)
 
+@app.route('/delete/<id>')
+def delete(id):
+    db_sess = db_session.create_session()
+    post = db_sess.query(Post).filter(Post.id == id).first()
+    db_sess.delete(post)
+    db_sess.commit()
+    db_sess.close()
+    return redirect('/')
 
 @app.route('/ctest')
 def ctest():

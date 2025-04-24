@@ -1,3 +1,7 @@
+.background {
+    background-color: red;
+}
+
 .btn {
     display: inline-block; /* Строчно-блочный элемент */
     background: #8C959D; /* Серый цвет фона */
@@ -10,15 +14,17 @@
 .sidenav {
     float: left;
     margin-right: 15px;
-    height: 90vh; /* Full-height: remove this if you want "auto" height */
+    height: 89vh; /* Full-height: remove this if you want "auto" height */
     width: 10%; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     bottom: 0; /* Stay at the top */
     left: 0; /* Black */
     overflow-x: hidden;
-    padding-top: 20px;
-    background-color: #f2f2f2;
-    padding-right: 0px;
+
+    background-color: white;
+    margin: 0.5vh 0.5vh 0.5vh 0.5vh;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 /* The navigation menu links */
@@ -28,6 +34,22 @@
     font-size: 25px;
     color: black;
     display: block;
+}
+
+.sidenav p {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 25px;
+    color: black;
+    display: block;
+}
+
+p.tomain {
+    border: 1px solid #ccc;
+}
+
+p.tomain:hover {
+    background-color: #f2f2f2;
 }
 
 /* When you mouse over the navigation links, change their color */
@@ -44,7 +66,24 @@
 }
 
 .sidenav li:hover {
+    background-color: #f2f2f2;
+}
+
+.delete-button {
+    border-radius: 5px;
+    border: 1px solid red;
+    color: red;
+    text-decoration: none;
+    height: 100%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.delete-button:hover {
     background-color: red;
+    color: white
 }
 
 header.myheader {

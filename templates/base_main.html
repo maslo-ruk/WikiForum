@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <title>{{title}}</title>
 </head>
-<body>
+<body bgcolor="#bd1c1c">
 <header class="myheader">
     <!-- https://getbootstrap.com/docs/5.1/components/navbar/ -->
     <nav class="myheader">
@@ -43,21 +43,19 @@
     </nav>
     <h4>{{theme}}</h4>
 </header>
-  <aside class="sidenav"> <!-- Боковая панель (сайдбар) -->
-  <nav> <!-- Дополнительное меню страницы -->
-    <ul>
-      {%for tag in tags%}
-      <li class="liv"><a href={{tag.href}}>{{tag.name}}</a></li>
-      {%endfor%}
-    </ul>
-    <p class="tik">{{x}}</p>
-      <select name="sort_by" id="sort_by">
-        <option class="optionn" value="popularity">Популярность</option>
-        <option class="optionn" value="likes">Лайки</option>
-      </select>
-  </nav>
-</aside>
 <main>
+      <aside class="sidenav"> <!-- Боковая панель (сайдбар) -->
+          <nav>
+              <!-- Дополнительное меню страницы -->
+            <p class="tomain"><a href="/">На главную</a></p>
+            <p>Теги:</p>
+            <ul>
+              {%for tag in tags%}
+              <li class="liv"><a href={{tag.href}}>{{tag.name}}</a></li>
+              {%endfor%}
+            </ul>
+          </nav>
+    </aside>
     <div class="index-content">
         {% block content %}{% endblock %}
     </div>

@@ -71,7 +71,7 @@
     <p>Автор: <a href="/{{author_href}}">{{author_name}}</a></p>
     <form action="" method="post">
         {{comment_form.hidden_tag()}}
-        <p>Комментарии к посту:</p>
+        <h4>Комментарии к посту:</h4>
         <div>
             {{ comment_form.content }}
             <p>{{comment_form.submit(type='submit')}}</p>

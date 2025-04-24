@@ -5,6 +5,17 @@ from data.tags import Tag
 from data.config import *
 
 
+def check_pochta(email: str):
+    if '@' in email:
+        x = email.find('@')
+        if '.' in email and email.rfind('.') > x:
+            return True
+        else:
+            return False
+    else:
+        return False
+
+
 def check_password_safe(password):
     return True
 
@@ -115,6 +126,7 @@ def captcha(word):
     return f.getvalue()
 
 def parse_post(content, post_id):
+    counter = 0
     parsed = ''
     tag_opened = False
     tag = ''
@@ -135,5 +147,9 @@ def parse_post(content, post_id):
                     parsed += f'<img src="/static/image/post_pictures/{post_id}_{tag}"<br>'
         else:
             parsed += i
+            counter += 1
+            if counter == POST_LEN:
+                counter = 0
+                parsed+='\n'
     return parsed
 
