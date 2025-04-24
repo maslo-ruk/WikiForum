@@ -3,11 +3,21 @@
 {% block content %}
         {% if posts %}
           {%for post in posts%}
-          <div class="visible-post">
-            <a href={{post.href}}>{{post.title}}</a>
-            <p>{{post.short}}</p>
+          <div class="container-post">
+              {% if post.photos_paths %}
+                <div class="image-container">
+                    <img src="/{{post.first_photopath}}" alt="картинка хыхыхы">
+                </div>
+              {% endif %}
+                <div class="postcontent">
+                    <a href="{{post.href}}" class="post-title">{{post.title}}</a>
+                    <p>{{post.short}}</p>
+                </div>
+              {% if post.user_id == user or user == 1%}
+                <a href="/delete/{{post.id}}" class="delete-button">Удалить пост</a>
+            {%endif%}
+              {%endfor%}
           </div>
-          {%endfor%}
         {%else%}
             <p>Ничего не найдено</p>
         {%endif%}

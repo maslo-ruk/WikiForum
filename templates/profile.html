@@ -102,10 +102,17 @@
     <h1>Понравившиеся посты:</h1>
     <div class="like-container">
         {% for post in liked_posts %}
-              <div class="visible-post">
-                <a href={{post.href}}>{{post.title}}</a>
-                <p>{{post.short}}</p>
-              </div>
+              <div class="container-post">
+      {% if post.photos_paths %}
+        <div class="image-container">
+            <img src="/{{post.first_photopath}}" alt="картинка хыхыхы">
+        </div>
+      {% endif %}
+    <div class="postcontent">
+        <a href="{{post.href}}" class="post-title">{{post.title}}</a>
+        <p>{{post.short}}</p>
+    </div>
+</div>
         {% endfor %}
     </div>
 </div>
