@@ -359,13 +359,17 @@ def tag(id):
     s_form = SearchPostForm()
     session = db_session.create_session()
     posts = find_posts_by_tag(id)
+    if current_user.is_authenticated:
+        user = current_user.id
+    else:
+        user = 0
     if request.method == 'POST':
         if s_form.validate_on_submit():
             text = s_form.title.data
             return redirect(f'/search/{text}')
     session.close()
     return render_template('tag_page.html', posts=posts, search_form=s_form,
-                           tags=session.query(Tag).all(), user=current_user.id)
+                           tags=session.query(Tag).all(), user=0)
 
 @app.route('/delete/<id>')
 def delete(id):
