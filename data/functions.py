@@ -109,7 +109,7 @@ def captcha(word):
         # случайное положение по высоте
         y = randint(3, 55)
         # наносим символ
-        draw.text((x, y), let, fill=(randint(0, 200), randint(0, 200), randint(0, 200), 128), font_size=700)
+        draw.text((x, y), let, fill=(randint(0, 200), randint(0, 200), randint(0, 200), 128), font_size=50)
 
     # создаем шум капчи (в данном случае черточки)
     # можно создать шум точками (кому как нравится)

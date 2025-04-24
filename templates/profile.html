@@ -82,21 +82,21 @@
 <body>
 
 <div class="container">
-    <div class="buttons"><a href="http://127.0.0.1:8080/" class="back-button">←</a><h1>Профиль пользователя</h1></div>
+    <div class="buttons"><a href="/" class="back-button">←</a><h1>Профиль пользователя</h1></div>
 
     <div class="buttons">
         <h2>{{name}}</h2>
-        <img src={{photo}} class="my-image" alt="..." height="10" width="20" style="border: 3px solid black;">
+        <img src="{{photo}}" class="my-image" alt="..." height="10" width="20" style="border: 3px solid black;">
     </div>
 
 
     <div class="profile-item">
         <label for="email">Электронная почта:</label>
-        <p id="email">{{email}}
+      <p id="email">{{email}}</p>
     </div>
 
     <div class="buttons">
-        <a href="http://127.0.0.1:8080/edit_profile" class="btn">Редактировать</a>
+        <a href="/edit_profile" class="btn">Редактировать</a>
 
     </div>
     <h1>Понравившиеся посты:</h1>
