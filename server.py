@@ -1,6 +1,5 @@
 import shutil
 
-
 from flask import Flask, request, render_template, redirect, jsonify, make_response, session
 from data.functions import *
 from data.posts_api import PostResourse, PostListResource
@@ -9,7 +8,6 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from data.forms import *
 from flask_restful import reqparse, abort, Api, Resource
 from data.comment import Comment
-
 
 from werkzeug.utils import secure_filename
 import json
@@ -35,7 +33,7 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/testt', methods =['GET','POST'])
+@app.route('/testt', methods=['GET', 'POST'])
 def testtt():
     if request.method == 'POST':
         sort_by = request.cookies.get("sort_by", 0)
@@ -79,6 +77,7 @@ def index():
                                             tags=session.query(Tag).all(), x=request.cookies.get('sort_by'), user=user))
     return res
 
+
 @app.route('/search/<text>', methods=['GET', 'POST'])
 def search(text):
     s_form = SearchPostForm()
@@ -100,16 +99,16 @@ def search(text):
 
 @app.route("/edit_profile", methods=["get", "post"])
 def edit_profile():
+    print(current_user.id)
     form = EditForm()
     db_sess = db_session.create_session()
     cu = db_sess.query(User).filter(User.id == current_user.id).first()
     if form.validate_on_submit():
         email = form.email.data
         name = form.name.data
+        print(name)
         if not check_pochta(email):
-            return render_template('register.html', form=form, message='Неверный формат почты!')
-        if db_sess.query(User).filter(User.email == email).first():
-            return render_template('register.html', form=form, message='Такой пользователь уже есть!')
+            return render_template('edit.html', form=form, message='Неверный формат почты!')
         cu.name = name
         cu.email = email
         db_sess.commit()
@@ -119,6 +118,7 @@ def edit_profile():
     db_sess.close()
     return render_template('edit.html', form=form)
 
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     from random import choice
@@ -126,6 +126,9 @@ def register():
     db_sess = db_session.create_session()
     code = session.get('captcha_code', 0)
     print(not code)
+    a = db_sess.query(User).all()
+    for i in a:
+        print(i.name, i.email)
     if not code:
         session['captcha_code'] = ''.join([choice('QERTYUPLKJHGFDSAZXCVBN23456789') for i in range(5)])
         code = session.get('captcha_code', 0)
@@ -154,7 +157,8 @@ def register():
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'] + '/profile_pictures', photo))
                     user.photo_path = f'static/image/profile_pictures/{photo}'
                 elif file:
-                    return render_template('register.html', form=form, message=f'Неверный форма изображения.\nДопустимые форматы:\n{", ".join(ALLOWED_EXTENSIONS)}',
+                    return render_template('register.html', form=form,
+                                           message=f'Неверный форма изображения.\nДопустимые форматы:\n{", ".join(ALLOWED_EXTENSIONS)}',
                                            word=code)
                 else:
                     print('a')
@@ -184,6 +188,7 @@ def login():
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
+        print(password)
         if not session.query(User).filter(User.email == email).first():
             return render_template('login.html', form=form, message='Нет такого пользователя')
         user = session.query(User).filter(User.email == email).first()
@@ -208,8 +213,8 @@ def logout():
 @app.route('/add_post', methods=['GET', 'POST'])
 def add_postt():
     if current_user.is_authenticated:
-        session = db_session.create_session()
-        all_tags_ = session.query(Tag).all()
+        db_sess = db_session.create_session()
+        all_tags_ = db_sess.query(Tag).all()
         all_tags = []
         for i in all_tags_:
             all_tags.append(i.to_dict())
@@ -219,12 +224,19 @@ def add_postt():
             keywords = request.form["keywords"]
             tags = request.form.getlist("tags")
             files = request.files.getlist("files")
+            for file in files:
+                try:
+                    if file and not allowed_file(file.filename):
+                        return render_template('add_post-2.html', tags=all_tags, message = 'Тип файла не поддерживается!')
+                except Exception:
+                    pass
             idd = current_user.id
             add_post(name, story, list(map(int, tags)), idd)
-            session = db_session.create_session()
-            post = session.query(Post).all()[-1]
+            db_sess = db_session.create_session()
+            post = db_sess.query(Post).filter(Post.user_id == current_user.id).all()[-1]
             post.keywords = keywords
             post_id = post.id
+            post.href = f"post/{post_id}"
             count = 0
             for file in files:
                 count += 1
@@ -235,15 +247,17 @@ def add_postt():
                         post.photos_paths += f'{os.path.join(app.config["UPLOAD_FOLDER"])}/post_pictures/{post_id}_{count}.{file.filename.rsplit(".", 1)[1]} '
                         if count == 1:
                             post.first_photopath = f'{os.path.join(app.config["UPLOAD_FOLDER"])}/post_pictures/{post_id}_{count}.{file.filename.rsplit(".", 1)[1]}'
+                    elif file:
+                        return render_template('add_post-2.html', tags=all_tags, message = 'Тип файла не поддерживается!')
                     else:
                         photo = STANDART_PHOTO
                 except Exception:
                     pass
-            session.commit()
-            session.close()
+            db_sess.commit()
+            db_sess.close()
             return redirect(f'/post/{post_id}')
-        session.commit()
-        session.close()
+        db_sess.commit()
+        db_sess.close()
         return render_template('add_post-2.html', tags=all_tags)
     else:
         return redirect('/not_authenticated')
@@ -258,6 +272,9 @@ def not_authenticated():
 def postt(id):
     session = db_session.create_session()
     post = session.query(Post).filter(Post.id == id).first()
+    posts = session.query(Post).all()
+    for i in posts:
+        print(i.id, i.title, i.href, i.content)
     author = post.user.to_dict()
     button_text = 'Нравится'
     photo_paths = post.photos_paths.split(' ')
@@ -304,8 +321,10 @@ def postt(id):
                            author_name=author['name'], author_href=author['href'], comments=comments,
                            user=user, liked=liked)
 
+
 @app.route('/like', methods=['POST', 'GET'])
 def like():
+    print(1)
     if request.method == 'POST':
         print(1)
         if current_user.is_authenticated:
@@ -320,18 +339,21 @@ def like():
                 user.liked_posts.append(post)
                 post.likes += 1
                 db_sess.commit()
-                return {'success': True,'can_like': True, 'val':1}
+                return {'success': True, 'can_like': True, 'val': 1}
             else:
                 user.liked_posts.remove(post)
                 post.likes -= 1
                 db_sess.commit()
                 return {'success': True, 'can_like': True, 'val': -1}
         else:
-            return jsonify({'success': True,'can_like': False, 'val':1})
+            return jsonify({'success': True, 'can_like': False, 'val': 1})
+
 
 @app.route('/profile')
 def account():
     user_id = current_user.id
+    print(user_id)
+    print(user_id)
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == user_id).first()
     nick_name = user.name
@@ -349,10 +371,12 @@ def author(id):
     session = db_session.create_session()
     user = session.query(User).get(id)
     name = user.name
+    href = user.photo_path
     user_posts = user.posts
     session.close()
     print(user_posts)
-    return render_template('users_profile.html', name=name, user_posts=user_posts)
+    return render_template('users_profile.html', name=name, user_posts=user_posts, href=href)
+
 
 @app.route('/tag/<id>')
 def tag(id):
@@ -371,6 +395,7 @@ def tag(id):
     return render_template('tag_page.html', posts=posts, search_form=s_form,
                            tags=session.query(Tag).all(), user=0)
 
+
 @app.route('/delete/<id>')
 def delete(id):
     db_sess = db_session.create_session()
@@ -379,6 +404,7 @@ def delete(id):
     db_sess.commit()
     db_sess.close()
     return redirect('/')
+
 
 @app.route('/ctest')
 def ctest():
@@ -391,7 +417,7 @@ def ctest():
     return render_template('ctest.html', word=code)
 
 
-@app.route('/change_captcha_code', methods =['GET','POST'])
+@app.route('/change_captcha_code', methods=['GET', 'POST'])
 def ccode():
     if request.method == 'POST':
         a = request.json['code']

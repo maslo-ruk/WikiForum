@@ -1,7 +1,7 @@
 function new_captcha() {
     const characters = 'QWERTYUPLKJHGFDSAZXCVBN23456789';
     let generatedCode = '';
-    const url = "https://heartbreaking-entertaining-oviraptor.glitch.me/change_captcha_code";
+    const url = "http://127.0.0.1:8080/change_captcha_code";
 
     for (let index = 0; index < 5; index++) {
         generatedCode += characters.charAt(Math.floor(Math.random() * characters.length));

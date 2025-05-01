@@ -34,9 +34,10 @@ def make_db():
 
 def main():
     db_session.global_init('db/wikiforum.db')
-    for i in range(7):
-        x = input()
-        add_tag(x)
+    sess = db_session.create_session()
+    users = sess.query(User).all()
+    for i in users:
+        print(i.name, i.email, i.id)
 
 main()
 
